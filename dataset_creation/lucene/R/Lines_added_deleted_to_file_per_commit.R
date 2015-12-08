@@ -4,6 +4,7 @@
 # Import libraries
 library(dplyr)
 library(ggplot2)
+library(gridExtra)
 
 # Import dataset
 lucene_data <- read.csv(file="../dataset/lucene_dataset_v1.csv",head=TRUE,sep=",")
@@ -59,17 +60,16 @@ commit_total_lines %>%
 histogramAdded <- ggplot(
   data=lucene_data_select,
   aes(lucene_data_select$lines_added_per_file_in_commit)
-) + geom_histogram() + scale_x_log10() + labs(title="Distribution of commit size addded to file")  + labs(x="Total number of lines added to file in commit", y="Frequency")
-histogramAdded
+) + geom_histogram() + scale_x_log10() + labs(title="Distribution of lines added to file in commit")  + labs(x="Total number of lines added to file in commit", y="Frequency")
 
 
 # Density plot
 histogramDeleted <- ggplot(
   data=lucene_data_select,
   aes(lucene_data_select$lines_deleted_per_file_in_commit)
-) + geom_histogram() + scale_x_log10() + labs(title="Distribution of commit size deleted from file")  + labs(x="Total number of lines added to file in commit", y="Frequency")
-histogramDeleted
+) + geom_histogram() + scale_x_log10() + labs(title="Distribution of lines deleted from file in commit")  + labs(x="Total number of lines deleted from file in commit", y="Frequency")
 
+grid.arrange(histogramAdded, histogramDeleted, nrow=2)
 
 
 
