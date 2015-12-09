@@ -63,14 +63,36 @@ summary(aov1)
 
 # Boxplots
 
-boxplot <- ggplot(data=lucene_metrics, aes(factor(implicated), minor_contributors))
+boxplot <- ggplot(data=lucene_metrics, aes(factor(implicated), commit_ownership))
+boxplot + geom_boxplot()
+
+boxplot <- ggplot(data=lucene_metrics, aes(factor(implicated), line_ownership_added))
+boxplot + geom_boxplot()
+
+boxplot <- ggplot(data=lucene_metrics, aes(factor(implicated), line_ownership_deleted))
 boxplot + geom_boxplot()
 
 boxplot <- ggplot(data=lucene_metrics, aes(factor(implicated), total_contributors))
 boxplot + geom_boxplot()
 
-boxplot <- ggplot(data=lucene_metrics, aes(factor(implicated), commit_ownership))
+boxplot <- ggplot(data=lucene_metrics, aes(factor(implicated), minor_contributors))
 boxplot + geom_boxplot()
+
+boxplot <- ggplot(data=lucene_metrics, aes(factor(implicated), major_contributors))
+boxplot + geom_boxplot()
+
+boxplot <- ggplot(data=lucene_metrics, aes(factor(implicated), lines_added_minor_contributors))
+boxplot + geom_boxplot()
+
+boxplot <- ggplot(data=lucene_metrics, aes(factor(implicated), lines_added_major_contributors))
+boxplot + geom_boxplot()
+
+boxplot <- ggplot(data=lucene_metrics, aes(factor(implicated), lines_deleted_minor_contributors))
+boxplot + geom_boxplot()
+
+boxplot <- ggplot(data=lucene_metrics, aes(factor(implicated), lines_deleted_major_contributors))
+boxplot + geom_boxplot()
+
 
 # #_______________________________________________________________________
 # 
