@@ -62,8 +62,11 @@ lucene_minor <- lucene_select %>%
   group_by(sha, file) %>%
   summarise(minor_contributors = n_distinct(author))
   
-lucene_metrics <- merge(lucene_metrics, lucene_major, by=c("sha", "file"))
-lucene_metrics <- merge(lucene_metrics, lucene_minor, by=c("sha", "file"))
+lucene_metrics <- merge(lucene_metrics, lucene_major, by=c("sha", "file"), all=TRUE)
+lucene_metrics <- merge(lucene_metrics, lucene_minor, by=c("sha", "file"), all=TRUE)
+
+lucene_metrics['major_contributors'][is.na(lucene_metrics["major_contributors"])] <- 0
+lucene_metrics['minor_contributors'][is.na(lucene_metrics["minor_contributors"])] <- 0
 
 # Lines added major-minor
 lucene_major <- lucene_select %>%
@@ -76,9 +79,11 @@ lucene_minor <- lucene_select %>%
   group_by(sha, file) %>%
   summarise(lines_added_minor_contributors = n_distinct(author))
 
-lucene_metrics <- merge(lucene_metrics, lucene_major, by=c("sha", "file"))
-lucene_metrics <- merge(lucene_metrics, lucene_minor, by=c("sha", "file"))
+lucene_metrics <- merge(lucene_metrics, lucene_major, by=c("sha", "file"), all=TRUE)
+lucene_metrics <- merge(lucene_metrics, lucene_minor, by=c("sha", "file"), all=TRUE)
 
+lucene_metrics['lines_added_major_contributors'][is.na(lucene_metrics["lines_added_major_contributors"])] <- 0
+lucene_metrics['lines_added_minor_contributors'][is.na(lucene_metrics["lines_added_minor_contributors"])] <- 0
 
 # Lines deleted major-minor
 lucene_major <- lucene_select %>%
@@ -91,15 +96,18 @@ lucene_minor <- lucene_select %>%
   group_by(sha, file) %>%
   summarise(lines_deleted_minor_contributors = n_distinct(author))
 
-lucene_metrics <- merge(lucene_metrics, lucene_major, by=c("sha", "file"))
-lucene_metrics <- merge(lucene_metrics, lucene_minor, by=c("sha", "file"))
+lucene_metrics <- merge(lucene_metrics, lucene_major, by=c("sha", "file"), all=TRUE)
+lucene_metrics <- merge(lucene_metrics, lucene_minor, by=c("sha", "file"), all=TRUE)
+
+lucene_metrics['lines_deleted_major_contributors'][is.na(lucene_metrics["lines_deleted_major_contributors"])] <- 0
+lucene_metrics['lines_deleted_minor_contributors'][is.na(lucene_metrics["lines_deleted_minor_contributors"])] <- 0
 
 # Add last column
 lucene_implicated <- lucene_select %>%
   group_by(sha, file) %>%
   summarise(implicated = mean(implicated)) #Mean of a value that is always the same, it gives the value itself
 
-lucene_metrics <- merge(lucene_metrics, lucene_implicated, by=c("sha", "file"))
+lucene_metrics <- merge(lucene_metrics, lucene_implicated, by=c("sha", "file"), all=TRUE)
 
 # Write in file
 write.csv(lucene_metrics, file = "../dataset/lucene_features.csv", row.names=FALSE)
