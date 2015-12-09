@@ -36,6 +36,7 @@ lucene_select <- transform(
 
 # Set the NA values to 0 so it can be plotted.
 lucene_select['author_ownership_deleted'][is.na(lucene_select["author_ownership_deleted"])] <- 0
+lucene_select['author_ownership_added'][is.na(lucene_select["author_ownership_added"])] <- 0
 
 #COMPUTE FILE FEATURES
 lucene_metrics <- lucene_select %>%

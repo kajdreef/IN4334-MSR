@@ -93,7 +93,6 @@ boxplot + geom_boxplot()
 boxplot <- ggplot(data=lucene_metrics, aes(factor(implicated), lines_deleted_major_contributors))
 boxplot + geom_boxplot()
 
-
 # #_______________________________________________________________________
 # 
 # #THE NEXT PART STILL DOES NOT MAKE TOO MUCH SENSE - IT MUST BE DONE ON FILE FEATURES
