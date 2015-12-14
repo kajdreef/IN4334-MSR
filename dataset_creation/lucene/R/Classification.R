@@ -1,0 +1,76 @@
+###########################################################################################
+# Classification of the data to see if there is a correlation
+#
+# Tutorial: http://scg.sdsu.edu/rf_r/
+# Documentation: http://www.inside-r.org/packages/cran/randomforest/docs/randomforest
+# Info on importance output: https://dinsdalelab.sdsu.edu/metag.stats/code/randomforest.html
+###########################################################################################
+
+# Clear history
+(rm(list=ls()))
+
+
+# Import libraries
+library(dplyr)
+library(ggplot2)
+library(randomForest)
+library(ROCR)
+
+
+set.seed(71)
+
+lucene_metrics <-read.csv(file="../dataset/lucene_features.csv",head=TRUE,sep=",")
+
+lucene_metrics_selected <- lucene_metrics %>%
+                            select(commit_ownership, minor_contributors, major_contributors,
+                            line_ownership_added, lines_added_major_contributors, lines_added_minor_contributors,
+                            line_ownership_deleted, lines_deleted_major_contributors, lines_deleted_minor_contributors,
+                            implicated) %>%
+                            transform(implicated = as.factor(implicated))
+
+lucene_bugs <- lucene_metrics_selected %>%
+                filter(implicated == 1)
+  
+lucene_non_bugs <- lucene_metrics_selected %>%
+  filter(implicated == 0)
+
+
+### Create the datasets for training and validating!
+sample_data_train1 <- lucene_bugs[sample(nrow(lucene_bugs), 2000, replace=TRUE, prob=NULL), ]
+sample_data_train0 <- lucene_non_bugs[sample(nrow(lucene_non_bugs), 2000, replace=TRUE, prob=NULL), ]
+train <- rbind(sample_data_train0, sample_data_train1)
+
+sample_data_validate1 <- lucene_bugs[sample(nrow(lucene_bugs), 2000, replace=TRUE, prob=NULL), ]
+sample_data_validate0 <- lucene_non_bugs[sample(nrow(lucene_non_bugs), 2000, replace=TRUE, prob=NULL), ]
+validate <-  rbind(sample_data_validate0, sample_data_validate1)
+
+
+### Apply Random Forest
+train.rf <- randomForest(implicated ~ ., data=train, importance=TRUE, proximity=TRUE)
+
+print(train.rf)
+
+round(importance(train.rf), 2)
+
+## Do MDS on 1 - proximity:
+# train.mds <- cmdscale(1 - train.rf$proximity, eig=TRUE)
+# op <- par(pty="s")
+# pairs(cbind(train[,1:4], train.mds$points), cex=0.6, gap=0,
+#       col=c("red", "green", "blue")[as.numeric(train$implicated)],
+#       main="Lucene Data: Predictors and MDS of Proximity Based on RandomForest")
+# par(op)
+# print(train.mds$GOF)
+
+## Check he performance of random forrest!
+train.rf.pr = predict(train.rf, type="prob", newdata=validate)[,2]
+train.rf.pred = prediction(train.rf.pr, validate$implicated)
+train.rf.perf <- performance(train.rf.pred, "rec","prec")
+plot(train.rf.perf,main="Recall - precision curve",col=2,lwd=2)
+train.rf.perf <- performance(train.rf.pred,"tpr","fpr")
+plot(train.rf.perf,main="ROC Curve for Random Forest",col=2,lwd=2)
+
+abline(a=0,b=1,lwd=2,lty=2,col="gray")
+
+importance(train.rf)
+varImpPlot(train.rf)
+
