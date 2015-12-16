@@ -16,10 +16,11 @@ library(ggplot2)
 library(randomForest)
 library(ROCR)
 
+setwd("/home/eric/Documents/msr/ownership/IN4334-MSR/dataset_creation/lucene/R")
 
 set.seed(71)
 
-lucene_metrics <-read.csv(file="../dataset/lucene_features.csv",head=TRUE,sep=",")
+lucene_metrics <-read.csv(file="../dataset/lucene_features_t_5.csv",head=TRUE,sep=",")
 
 lucene_metrics_selected <- lucene_metrics %>%
                             select(commit_ownership, minor_contributors, major_contributors,
