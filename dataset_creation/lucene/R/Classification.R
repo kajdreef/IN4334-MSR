@@ -14,16 +14,13 @@
 library(dplyr)
 library(ggplot2)
 library(randomForest)
-library(ROCR)
-
-setwd("/home/eric/Documents/msr/ownership/IN4334-MSR/dataset_creation/lucene/R")
 
 set.seed(71)
 
 lucene_metrics <-read.csv(file="../dataset/lucene_features_t_5.csv",head=TRUE,sep=",")
 
 lucene_metrics_selected <- lucene_metrics %>%
-                            select(commit_ownership, minor_contributors, major_contributors,
+                            select( commit_ownership, minor_contributors, major_contributors,
                             line_ownership_added, lines_added_major_contributors, lines_added_minor_contributors,
                             line_ownership_deleted, lines_deleted_major_contributors, lines_deleted_minor_contributors,
                             implicated) %>%
@@ -31,9 +28,9 @@ lucene_metrics_selected <- lucene_metrics %>%
 
 lucene_bugs <- lucene_metrics_selected %>%
                 filter(implicated == 1)
-  
+
 lucene_non_bugs <- lucene_metrics_selected %>%
-  filter(implicated == 0)
+                filter(implicated == 0)
 
 
 ### Create the datasets for training and validating!
@@ -47,26 +44,15 @@ validate <-  rbind(sample_data_validate0, sample_data_validate1)
 
 
 ### Apply Random Forest
-train.rf <- randomForest(implicated ~ ., data=train, importance=TRUE, proximity=TRUE)
-
+train.rf <- randomForest(implicated ~ ., data=train, importance=TRUE)
 print(train.rf)
-
 round(importance(train.rf), 2)
 
-## Do MDS on 1 - proximity:
-# train.mds <- cmdscale(1 - train.rf$proximity, eig=TRUE)
-# op <- par(pty="s")
-# pairs(cbind(train[,1:4], train.mds$points), cex=0.6, gap=0,
-#       col=c("red", "green", "blue")[as.numeric(train$implicated)],
-#       main="Lucene Data: Predictors and MDS of Proximity Based on RandomForest")
-# par(op)
-# print(train.mds$GOF)
 
 ## Check he performance of random forrest!
 train.rf.pr = predict(train.rf, type="prob", newdata=validate)[,2]
 train.rf.pred = prediction(train.rf.pr, validate$implicated)
 train.rf.perf <- performance(train.rf.pred, "rec","prec")
-plot(train.rf.perf,main="Recall - precision curve",col=2,lwd=2)
 train.rf.perf <- performance(train.rf.pred,"tpr","fpr")
 plot(train.rf.perf,main="ROC Curve for Random Forest",col=2,lwd=2)
 
@@ -74,4 +60,3 @@ abline(a=0,b=1,lwd=2,lty=2,col="gray")
 
 importance(train.rf)
 varImpPlot(train.rf)
-
