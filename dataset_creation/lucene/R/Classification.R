@@ -19,7 +19,7 @@ library(ROCR)
 
 set.seed(71)
 
-lucene_metrics <-read.csv(file="../dataset/lucene_features.csv",head=TRUE,sep=",")
+lucene_metrics <-read.csv(file="../dataset/lucene_features_t_5.csv",head=TRUE,sep=",")
 
 lucene_metrics_selected <- lucene_metrics %>%
                             select( commit_ownership, minor_contributors, major_contributors,
@@ -30,7 +30,7 @@ lucene_metrics_selected <- lucene_metrics %>%
 
 lucene_bugs <- lucene_metrics_selected %>%
                 filter(implicated == 1)
-  
+
 lucene_non_bugs <- lucene_metrics_selected %>%
                 filter(implicated == 0)
 
@@ -62,4 +62,3 @@ abline(a=0,b=1,lwd=2,lty=2,col="gray")
 
 importance(train.rf)
 varImpPlot(train.rf)
-

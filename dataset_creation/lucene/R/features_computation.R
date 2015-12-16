@@ -18,7 +18,7 @@ library(corrgram)
 setwd("/home/eric/Documents/msr/ownership/IN4334-MSR/dataset_creation/lucene/R")
 
 # Import dataset
-lucene_data <-read.csv(file="../dataset/lucene_dataset_v1.csv",head=TRUE,sep=",")
+lucene_data <-read.csv(file="../dataset/lucene_dataset_v2.csv",head=TRUE,sep=",")
 
 # Get the Interesting features for this 
 lucene_select <- lucene_data %>%
@@ -44,12 +44,12 @@ lucene_metrics <- lucene_select %>%
   summarise(commit_ownership = max(author_ownership),
             line_ownership_added = max(author_ownership_added),
             line_ownership_deleted = max(author_ownership_deleted),
-            total_contributors = n_distinct(author),
-            total_lines_added = mean(file_tot_added), #Mean of a value that is always the same, it gives the value itself
-            total_lines_deleted = mean(file_tot_deleted)
+            total_contributors = n_distinct(author)
+            #total_lines_added = mean(file_tot_added), #Mean of a value that is always the same, it gives the value itself
+            #total_lines_deleted = mean(file_tot_deleted)
             )
 
-threshold = 0.05 # To distinguish minor and major, it should be computed using some info
+threshold = 0.3 # To distinguish minor and major, it should be computed using some info
                  # about the summary of the file
 
 # Commit major-minor
@@ -111,7 +111,7 @@ lucene_implicated <- lucene_select %>%
 lucene_metrics <- merge(lucene_metrics, lucene_implicated, by=c("sha", "file"), all=TRUE)
 
 # Write in file
-write.csv(lucene_metrics, file = "../dataset/lucene_features.csv", row.names=FALSE)
+write.csv(lucene_metrics, file = "../dataset/metrics_v2/lucene_features_t_30.csv", row.names=FALSE)
 
 
 
