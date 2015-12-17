@@ -14,7 +14,7 @@ fix_commit_data.summary<- fix_commit_data %>% summarise(
   SD = sd(time_in_days)
 )
 
-hist(fix_commit_data$time_in_days, freq=TRUE, main="Histogram of time between implicated line and the fix",xlab="Time (days)")
+hist(fix_commit_data$time_in_days, freq=TRUE,  main="Time between implicated line and the fix",xlab="Time (days)")
 abline(v = fix_commit_data.summary$mean, col = "red", lwd = 2)
 abline(v = fix_commit_data.summary$median, col = "blue", lwd = 2)
 
@@ -32,12 +32,12 @@ MoreThanOnce <- imp_count_list %>%
 
 imp_count_list.summary = list()
 imp_count_list.summary$PercImplMoreThanOnce <- nrow(MoreThanOnce)/nrow(imp_count_list.summary) *100
-imp_count_list.summary$mean <- mean(test$imp_count)
-imp_count_list.summary$median <- median(test$imp_count)
-imp_count_list.summary$SD <- sd(test$imp_count)
+imp_count_list.summary$mean <- mean(imp_count_list$imp_count)
+imp_count_list.summary$median <- median(imp_count_list$imp_count)
+imp_count_list.summary$SD <- sd(imp_count_list$imp_count)
 
 
-hist(imp_count_list$imp_count, freq=TRUE, main="Number of times a certain file version is implicated")
+hist(imp_count_list$imp_count, xlim=c(0, 20), freq=FALSE, main="Number of times a certain file version is implicated", xlab="Number of times a file is implicated")
 abline(v = imp_count_list.summary$mean, col = "red", lwd = 2)
 abline(v = imp_count_list.summary$median, col = "blue", lwd = 2)
 
