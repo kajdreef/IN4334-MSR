@@ -5,7 +5,7 @@ library(dplyr)
 (rm(list=ls()))
 
 fix_commit_data <-read.csv(file="../dataset/lucene_implicated_fix_time.csv",head=TRUE,sep=",")
-
+fix_issue_dates <- read.csv(file="../dataset/issue_dates.csv", head=TRUE, sep=',')
 
 ################################## TIME BETWEEN IMPLICATED LINES AND FIX ###########################################
 fix_commit_data.summary<- fix_commit_data %>% summarise(
@@ -18,6 +18,16 @@ hist(fix_commit_data$time_in_days, freq=TRUE, main="Histogram of time between im
 abline(v = fix_commit_data.summary$mean, col = "red", lwd = 2)
 abline(v = fix_commit_data.summary$median, col = "blue", lwd = 2)
 
+################################## TIME BETWEEN ISSUE CREATION AND RESOLUTION ###########################################
+fix_issue_dates.summary <- fix_issue_dates %>% summarise(
+  mean = mean(days_to_solve),
+  median = median(days_to_solve),
+  SD = sd(days_to_solve)
+)
+
+hist(fix_issue_dates$days_to_solve, xlim=c(1,1000), breaks=30, freq=TRUE, main="Histogram of time between issue creation and fix",xlab="Time (days)")
+abline(v = fix_issue_dates.summary$mean, col = "red", lwd = 2)
+abline(v = fix_issue_dates.summary$median, col = "blue", lwd = 2)
 
 ########################## COUNT NUMBER OF TIMES A SPECIFIC VERSION OF A FILE IS IMPLICATED ###################################
 
