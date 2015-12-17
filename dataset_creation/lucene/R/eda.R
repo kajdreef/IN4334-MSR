@@ -7,7 +7,7 @@ library(corrgram)
 setwd("/home/eric/Documents/msr/ownership/IN4334-MSR/dataset_creation/lucene/R")
 
 # Import dataset
-lucene_metrics <-read.csv(file="../dataset/metrics_v2/lucene_features_t_30.csv",head=TRUE,sep=",")
+lucene_metrics <-read.csv(file="../dataset/metrics_v2/lucene_features_t_20.csv",head=TRUE,sep=",")
 
 summary(lucene_metrics)
 
