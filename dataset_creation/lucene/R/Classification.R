@@ -19,7 +19,7 @@ library(ROCR)
 
 set.seed(71)
 
-lucene_metrics <-read.csv(file="../dataset/lucene_features_t_5.csv",head=TRUE,sep=",")
+lucene_metrics <-read.csv(file="../dataset/metrics_v2/lucene_features_t_5.csv",head=TRUE,sep=",")
 
 lucene_metrics_selected <- lucene_metrics %>%
                             select( commit_ownership, minor_contributors, major_contributors,
