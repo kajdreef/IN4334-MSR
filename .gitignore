@@ -1,4 +1,5 @@
 .DS_Store
+.gitignore~
 assignment1/issue_LUCENE
 assignment1/.ipynb_checkpoints
 
@@ -7,3 +8,9 @@ dataset_creation/lucene/Lucene/lucene-solr
 dataset_creation/lucene/.ipynb_checkpoints
 .Rhistory
 bug_dict.csv
+
+dataset_creation/camel/camel
+dataset_creation/camel/issue_CAMEL
+dataset_creation/camel/.ipynb_checkpoints
+dataset_creation/camel/out.csv
+dataset_creation/camel/diff_file.txt
