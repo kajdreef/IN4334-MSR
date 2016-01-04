@@ -1,5 +1,0 @@
-v1: All the variables, no authorship, no classic metrics, all the developement history
-v2: All the variables, no authorship, no classic metrics, without the first day and the last year of developement
-v3: v2 + code size and ownership of current lines (authorship) + comments stuff
-?v4: v3 + better time-window
-?v5: Only six months of developement
