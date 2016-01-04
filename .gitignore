@@ -27,3 +27,5 @@ dataset_creation/R/tests.R
 
 *_diff_file.txt
 *_blame_file.txt
+*_time_bug.txt
+*_time_fix.txt
