@@ -23,5 +23,7 @@ dataset_creation/lucene/issue_SOLR
 
 dataset_creation/out
 
+dataset_creation/R/tests.R
+
 *_diff_file.txt
 *_blame_file.txt
