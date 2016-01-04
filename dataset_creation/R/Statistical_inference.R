@@ -27,7 +27,7 @@ non_bugs_sampled_set <- non_bugs[
 
 for(i in 3:(ncol(non_bugs_sampled_set)-1)){
   print(names(non_bugs_sampled_set[i]))
-  result <- t.test(non_bugs_sampled_set[i], bugs_sampled_set[i], conf.level = 0.95)
+  result <- t.test(non_bugs_sampled_set[i], bugs_sampled_set[i])
   print(result$p.value)
 }
 
