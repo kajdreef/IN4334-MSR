@@ -9,17 +9,18 @@ bug_dict.csv
 
 dataset_creation/camel/camel
 dataset_creation/lucene/lucene-solr
-dataset_creation/hadoop/hadoop
+dataset_creation/zookeeper/zookeeper
+dataset_creation/maven/maven
+dataset_creation/mahout/mahout
 
-dataset_creation/camel/.ipynb_checkpoints
-dataset_creation/hadoop/.ipynb_checkpoints
-dataset_creation/lucene/.ipynb_checkpoints
 dataset_creation/.ipynb_checkpoints
 
 dataset_creation/camel/issue_CAMEL
-dataset_creation/hadoop/issue_HADOOP
 dataset_creation/lucene/issue_LUCENE
 dataset_creation/lucene/issue_SOLR
+dataset_creation/maven/issue_MNG
+dataset_creation/lucene/issue_MAHOUT
+dataset_creation/zookeeper/issue_ZOOKEEPER
 
 dataset_creation/out
 
