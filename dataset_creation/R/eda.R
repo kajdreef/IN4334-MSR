@@ -113,5 +113,3 @@ boxplot + geom_boxplot()
 
 boxplot <- ggplot(data=metrics, aes(factor(implicated), comment_to_code_ratio))
 boxplot + geom_boxplot()
-
-corrgram(metrics[,-15])
