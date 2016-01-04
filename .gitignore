@@ -19,7 +19,7 @@ dataset_creation/camel/issue_CAMEL
 dataset_creation/lucene/issue_LUCENE
 dataset_creation/lucene/issue_SOLR
 dataset_creation/maven/issue_MNG
-dataset_creation/lucene/issue_MAHOUT
+dataset_creation/mahout/issue_MAHOUT
 dataset_creation/zookeeper/issue_ZOOKEEPER
 
 dataset_creation/out
