@@ -15,9 +15,16 @@ library(ggplot2)
 library(corrplot)
 library(corrgram)
 
+project = "zookeeper" #change this
+threshold = 0.05 # To distinguish minor and major, it should be computed using some info
+                 # about the summary of the file
+
+
+input = paste("../", project, "/dataset/", project, "_dataset.csv", sep="")
+output = paste("../", project, "/dataset/", project, "_metrics","_",toString(threshold),".csv", sep="")
+
 # Import dataset
-data <-read.csv(file="../lucene/dataset/lucene_dataset.csv",head=TRUE,sep=",")
-#data <-read.csv(file="../camel/dataset/camel_dataset.csv",head=TRUE,sep=",")
+data <-read.csv(file = input,head=TRUE,sep=",")
 
 # Get the Interesting features for this 
 data_select <- data %>%
@@ -61,9 +68,6 @@ metrics <- data_select %>%
             #total_lines_added = mean(file_tot_added),
             #total_lines_deleted = mean(file_tot_deleted)
             )
-
-threshold = 0.05 # To distinguish minor and major, it should be computed using some info
-                 # about the summary of the file
 
 # Commit major-minor
 major <- data_select %>%
@@ -124,8 +128,8 @@ implicated <- data_select %>%
 metrics <- merge(metrics, implicated, by=c("sha", "file"), all=TRUE)
 
 # Write in file
-write.csv(metrics, file = "../lucene/dataset/lucene_metrics.csv", row.names=FALSE)
-#write.csv(metrics, file = "../camel/dataset/camel_metrics.csv", row.names=FALSE)
+write.csv(metrics, file = output, row.names=FALSE)
+
 
 
 

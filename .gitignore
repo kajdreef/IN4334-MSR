@@ -25,6 +25,7 @@ dataset_creation/zookeeper/issue_ZOOKEEPER
 dataset_creation/out
 
 dataset_creation/R/tests.R
+dataset_creation/R/.Rhistory
 
 *_diff_file.txt
 *_blame_file.txt
