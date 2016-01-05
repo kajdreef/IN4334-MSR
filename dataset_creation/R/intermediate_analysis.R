@@ -1,14 +1,15 @@
 # Clear history
 (rm(list=ls()))
 
-
 # Import libraries
 library(dplyr)
 library(ggplot2)
+library(randomForest)
+library(ROCR)
 
 #CHANGE THESE TWO PARAMETERS
 project = "lucene" 
-threshold = 0.05         #To distinguish minor and major
+threshold = 0.40         #To distinguish minor and major
 corr_cutoff = 0.7
 sample_size = 4000       #Check the output of table(metrics$implicated) before setting
 #SAMPLE SIZE MUST ALSO BE MULTIPLE OF K
@@ -55,15 +56,58 @@ hc = sapply(hc, add2, simplify = "array") #To consider sha and file
 non_redundant_sample_data = sample_data[,-c(hc)]
 
 #######################################################################################
-####################### CLASSIFYING WITH CLASSIC  METRICS #############################
-#######################################################################################
-library(randomForest)
-library(ROCR)
-
-# SELECT THEM FROM THE sample_data DATAFRAME
-
-#######################################################################################
-####################### CLASSIFYING WITH CLASSIC  METRICS + NEW #######################
+#######################            CLASSIFYING            #############################
 #######################################################################################
 
-# Use directly non_redundant_sample_data without selecting, do only the transform of the implicated column
+#### Remove data that is not needed anymore
+(rm(bugs, cors, non_bugs, sample_data_set1, sample_data_set2))
+
+
+# Transform implicated as a factor so it can be used for classification
+metrics_all <- non_redundant_sample_data %>%
+  select(-sha, -file) %>%
+  transform(implicated = as.factor(implicated))
+
+
+########### classic metrics
+metrics_classic <- sample_data %>%
+  select( file_size, comment_to_code_ratio,
+          implicated, id) %>%
+  transform(implicated = as.factor(implicated))
+  
+########### FUNCTION CLASSIFICATION
+classify <- function(data, k){
+  
+  list <- 1:k
+  sum = 0
+  for (i in 1:k){
+    # remove rows with id i from dataframe to create training set
+    # select rows with id i to create test set
+    trainingset <- subset(data, id %in% list[-i]) %>% select(-id)
+    testset <- data %>% filter(id == i) %>% select(-id)
+    
+    # run a random forest model
+    train.rf <- randomForest(implicated ~ ., data=trainingset, importance=TRUE)
+    round(importance(train.rf), 2)
+    print( train.rf$err.rate[nrow(train.rf$err.rate)])
+    sum = sum + train.rf$err.rate[nrow(train.rf$err.rate)]*100
+    
+    
+    train.rf.pr = predict(train.rf, type="prob", newdata=testset)[,2]
+    train.rf.pred = prediction(train.rf.pr, testset$implicated)
+    train.rf.perf <- performance(train.rf.pred,"tpr","fpr")
+
+  }
+  
+  plot(train.rf.perf,main="ROC Curve for Random Forest",col=2,lwd=2)
+  abline(a=0,b=1,lwd=2,lty=2,col="gray")
+  
+  varImpPlot(train.rf)
+  
+  cat("Performance: ",sum/k)
+}
+
+########### START CLASSIFICATION
+# classify(metrics_classic, k)
+classify(metrics_all, k)
+

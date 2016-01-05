@@ -21,6 +21,7 @@ dataset_creation/lucene/issue_SOLR
 dataset_creation/maven/issue_MNG
 dataset_creation/mahout/issue_MAHOUT
 dataset_creation/zookeeper/issue_ZOOKEEPER
+dataset_creation/hadoop/issue_HADOOP
 
 dataset_creation/out
 
