@@ -54,7 +54,12 @@ abline(v = imp_count_list.summary$mean, col = "red", lwd = 2)
 abline(v = imp_count_list.summary$median, col = "blue", lwd = 2)
 
 
+implicated_once <- imp_count_list %>%
+  filter(
+    imp_count == 1
+  )
 
-
+print("Percentage of implicated files that implicated more than once: ")
+print((1-nrow(implicated)/nrow(imp_count_list))*100)
 
 

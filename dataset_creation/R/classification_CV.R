@@ -8,10 +8,10 @@ library(randomForest)
 library(ROCR)
 
 #CHANGE THESE TWO PARAMETERS
-project = "lucene" 
+project = "maven" 
 threshold = 0.05         #To distinguish minor and major
 corr_cutoff = 0.75
-sample_size = 800       #Check the output of table(metrics$implicated) before setting
+sample_size = 2000       #Check the output of table(metrics$implicated) before setting
 #SAMPLE SIZE MUST ALSO BE MULTIPLE OF K
 k = 10                  ### K-folds
 set.seed(65)
@@ -62,57 +62,54 @@ non_redundant_sample_data = sample_data[,-c(hc)]
 #### Remove data that is not needed anymore
 (rm(bugs, cors, non_bugs, sample_data_set1, sample_data_set2))
 
-
-# Transform implicated as a factor so it can be used for classification
+########### All metrics ######################################################################
 metrics_all <- non_redundant_sample_data %>%
   select(-sha, -file) %>%
   transform(implicated = as.factor(implicated))
 
-
-########### All metrics ######################################################################
-metrics_all <- non_redundant_sample_data %>%
-  select( commit_ownership, minor_contributors,
-          line_ownership_added,
-          line_ownership_deleted, lines_deleted_major_contributors,
-          line_authorship,
-          file_size, comment_to_code_ratio,
-          implicated,id) %>%
-  transform(implicated = as.factor(implicated))
-
 ########### classic metrics + ADDED #################################################################
-metrics_added <- non_redundant_sample_data %>%
+metrics_added <- sample_data %>%
   select( file_size, comment_to_code_ratio,
-          line_ownership_added,
+          line_ownership_added, 
           implicated,id) %>%
   transform(implicated = as.factor(implicated))
 
 ########### classic metrics + DELETED #################################################################
-metrics_deleted <- non_redundant_sample_data %>%
+metrics_deleted <- sample_data %>%
   select( file_size, comment_to_code_ratio,
-          line_ownership_deleted, lines_deleted_major_contributors,
+          line_ownership_deleted, lines_deleted_minor_contributors,
           implicated,id) %>%
   transform(implicated = as.factor(implicated))
 
 ########### classic metrics + ORIGINAL #################################################################
-metrics_original <- non_redundant_sample_data %>%
+metrics_original <- sample_data %>%
   select( file_size, comment_to_code_ratio,
           commit_ownership, minor_contributors,
           implicated, id) %>%
   transform(implicated = as.factor(implicated))
 
 ########### classic metrics + line_authorship #################################################################
-metrics_line_authorship <- non_redundant_sample_data %>%
-  select( file_size, comment_to_code_ratio, line_authorship,
+metrics_line_authorship <- sample_data %>%
+  select( file_size, comment_to_code_ratio, 
+          line_authorship, total_authors,
           implicated, id) %>%
   transform(implicated = as.factor(implicated))
 
 
-########### classic metrics
-metrics_classic <- non_redundant_sample_data %>%
+########### classic metrics #################################################################
+metrics_classic <- sample_data %>%
   select( file_size, comment_to_code_ratio,
           implicated, id) %>%
   transform(implicated = as.factor(implicated))
 
+########### classic metrics + ALL LINE BASED FEATURES
+metrics_line_based <- sample_data %>%
+  select( line_authorship, total_authors,
+          line_ownership_deleted, lines_deleted_minor_contributors,
+          line_ownership_added, lines_deleted_minor_contributors,
+          file_size, comment_to_code_ratio,
+          implicated, id) %>%
+  transform(implicated = as.factor(implicated))
 
 ########### FUNCTION CLASSIFICATION
 classify <- function(data, k){
@@ -143,8 +140,8 @@ classify <- function(data, k){
 #   abline(a=0,b=1,lwd=2,lty=2,col="gray")
   
 #   varImpPlot(train.rf)
-  cat("Performance: ",sum/k)
-  return(train.rf$err.rate)
+#   cat("Performance: ",sum/k)
+#   return(train.rf$err.rate)
 }
 
 
@@ -153,11 +150,13 @@ print("metrics_classic")
 classify(metrics_classic, k)
 print("metrics_line_authorship")
 classify(metrics_line_authorship, k)
-print("metrics_original")
+print("metrics_commit")
 classify(metrics_original, k)
 print("metrics_added")
 classify(metrics_added, k)
 print("metrics_deleted")
 classify(metrics_deleted, k)
 print("metrics_all")
-train.rf <- classify(metrics_all, k)
+classify(metrics_all, k)
+print("metrics_line_based")
+classify(metrics_line_based, k)

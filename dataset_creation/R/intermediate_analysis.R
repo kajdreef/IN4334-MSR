@@ -8,10 +8,10 @@ library(randomForest)
 library(ROCR)
 
 #CHANGE THESE TWO PARAMETERS
-project = "lucene" 
+project = "maven" 
 threshold = 0.40         #To distinguish minor and major
-corr_cutoff = 0.7
-sample_size = 4000       #Check the output of table(metrics$implicated) before setting
+corr_cutoff = 0.75
+sample_size = 2000       #Check the output of table(metrics$implicated) before setting
 #SAMPLE SIZE MUST ALSO BE MULTIPLE OF K
 k = 10                  ### K-folds
 set.seed(65)
