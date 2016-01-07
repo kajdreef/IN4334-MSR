@@ -8,10 +8,10 @@ library(randomForest)
 library(ROCR)
 
 #CHANGE THESE TWO PARAMETERS
-project = "maven" 
+project = "zookeeper" 
 threshold = 0.05         #To distinguish minor and major
 corr_cutoff = 0.75
-sample_size = 2000       #Check the output of table(metrics$implicated) before setting
+sample_size = 800       #Check the output of table(metrics$implicated) before setting
 #SAMPLE SIZE MUST ALSO BE MULTIPLE OF K
 k = 10                  ### K-folds
 set.seed(65)
@@ -115,7 +115,6 @@ metrics_line_based <- sample_data %>%
 classify <- function(data, k){
   
   list <- 1:k
-  sum = 0
   for (i in 1:k){
     # remove rows with id i from dataframe to create training set
     # select rows with id i to create test set
@@ -125,23 +124,20 @@ classify <- function(data, k){
     # run a random forest model
     train.rf <- randomForest(implicated ~ ., data=trainingset, importance=TRUE)
     round(importance(train.rf), 2)
-#     print( train.rf$err.rate[nrow(train.rf$err.rate)])
-    sum = sum + train.rf$err.rate[nrow(train.rf$err.rate)]*100
-    
-    
+
+    oob = mean(predict(train.rf) != trainingset$implicated)
+
     train.rf.pr = predict(train.rf, type="prob", newdata=testset)[,2]
     train.rf.pred = prediction(train.rf.pr, testset$implicated)
     train.rf.perf <- performance(train.rf.pred,"tpr","fpr")
     
   }
-  print(train.rf)
+  print(oob)
+
+  plot(train.rf.perf,main="ROC Curve for Random Forest",col=2,lwd=2)
+  abline(a=0,b=1,lwd=2,lty=2,col="gray")
   
-#   plot(train.rf.perf,main="ROC Curve for Random Forest",col=2,lwd=2)
-#   abline(a=0,b=1,lwd=2,lty=2,col="gray")
-  
-#   varImpPlot(train.rf)
-#   cat("Performance: ",sum/k)
-#   return(train.rf$err.rate)
+  varImpPlot(train.rf)
 }
 
 
