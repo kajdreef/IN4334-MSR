@@ -1,57 +1,90 @@
 # Clear history
 (rm(list=ls()))
 
+
+# Import libraries
 library(dplyr)
-library(randomForest)
 library(ggplot2)
 
-setwd("/home/eric/Documents/msr/ownership/IN4334-MSR/dataset_creation/lucene/R")
+#CHANGE THESE TWO PARAMETERS
+project = "lucene" 
+threshold = 0.05         #To distinguish minor and major
+corr_cutoff = 0.75
+sample_size = 2000       #Check the output of table(metrics$implicated) before setting
+#SAMPLE SIZE MUST ALSO BE MULTIPLE OF K
+k = 10                  ### K-folds
+set.seed(65)
+#____________________________________________
 
+input = paste("../", project, "/dataset/", project, "_metrics","_",toString(threshold),".csv", sep="")
 
-set.seed(71)
+metrics <-read.csv(file=input ,head=TRUE,sep=",")
 
-data <-read.csv(file="../dataset/metrics_v3/lucene_features_t_5.csv",head=TRUE,sep=",")
+table(metrics$implicated)
 
-features <- data %>%
-  select(commit_ownership, line_ownership_added, line_ownership_deleted, 
-         total_contributors, major_contributors, minor_contributors,
-         lines_added_major_contributors, lines_added_minor_contributors,
-         lines_deleted_major_contributors, lines_deleted_minor_contributors,
-         implicated) %>%
-  transform(implicated = as.factor(implicated))
-
-lucene_1 <- features %>%
+#SAMPLING
+# create the dataset with even number of buggy/non-buggy rows
+bugs <- metrics %>%
   filter(implicated == 1)
 
-lucene_0 <- features %>%
+non_bugs <- metrics %>%
   filter(implicated == 0)
 
-sample_train1 <- lucene_1[sample(nrow(lucene_1), 4000, replace=TRUE, prob=NULL), ]
-sample_train0 <- lucene_0[sample(nrow(lucene_0), 4000, replace=TRUE, prob=NULL), ]
-train <- rbind(sample_train0, sample_train1)
+sample_data_set1 <- bugs[sample(nrow(bugs), sample_size, replace=TRUE, prob=NULL), ]
+sample_data_set2 <- non_bugs[sample(nrow(non_bugs), sample_size, replace=TRUE, prob=NULL), ]
+sample_data <- cbind(rbind(sample_data_set1, sample_data_set2), list("id"=1:k))
 
-sample_test1 <- lucene_1[sample(nrow(lucene_1), 4000, replace=TRUE, prob=NULL), ]
-sample_test0 <- lucene_0[sample(nrow(lucene_0), 4000, replace=TRUE, prob=NULL), ]
-test <- rbind(sample_test0, sample_test1)
+#######################################################################################
+####################### REMOVING HIGHLY CORRELATED FEATURES ###########################
+#######################################################################################
+library(caret)
 
-fit <- randomForest(implicated ~ .,  data=train, importance=TRUE, proximity=TRUE)
+add2 <- function(x) {
+  x + 2
+}
 
-importance(fit)
-varImpPlot(fit)
+cors = cor(sample_data[,c(-1,-2,-ncol(sample_data))])
+hc = findCorrelation(cors, cutoff=corr_cutoff)
+hc = sort(hc)
+hc = sapply(hc, add2, simplify = "array") #To consider sha and file
+non_redundant_sample_data = sample_data[,-c(hc)]
 
-fit
-#prediction <- predict(fit, test)
-#result <- data.frame(id = test[,0], implicated = prediction)
 
-#fit <- randomForest(as.factor(implicated) ~ commit_ownership + 
-#                      line_ownership_added + 
-#                      line_ownership_deleted + 
-#                      total_contributors + 
-#                      major_contributors + 
-#                      minor_contributors + 
-#                      lines_added_major_contributors + 
-#                      lines_added_minor_contributors +
-#                      lines_deleted_major_contributors + 
-#                      lines_deleted_minor_contributors, 
-#                    data=train, importance=TRUE, ntree=2000)
+# load the library
+#library(mlbench)
+# prepare training scheme
+#control <- trainControl(method="repeatedcv", number=10, repeats=3)
+# train the model
+#model <- train(implicated~., data=non_redundant_sample_data, method="lvq", preProcess="scale", trControl=control)
+# estimate variable importance
+#importance <- varImp(model, scale=FALSE)
+# summarize importance
+#print(importance)
+#plot(importance)
 
+#data = non_redundant_sample_data[,c(-1,-2,-ncol(non_redundant_sample_data))]
+data = sample_data[,c(-1,-2,-ncol(non_redundant_sample_data))]
+
+data <- data %>%
+  transform(implicated = as.factor(implicated))
+
+# ensure the results are repeatable
+set.seed(7)
+# load the library
+library(mlbench)
+library(randomForest)
+
+# load the data
+# define the control using a random forest selection function
+control <- rfeControl(functions=rfFuncs, method="cv", number=10)
+# run the RFE algorithm
+results <- rfe(data[,1:(ncol(data) - 1)], 
+               data[,ncol(data)], 
+               c(1:(ncol(data) - 1)), 
+               rfeControl=control)
+# summarize the results
+print(results)
+# list the chosen features
+predictors(results)
+# plot the results
+plot(results, type=c("g", "o"))

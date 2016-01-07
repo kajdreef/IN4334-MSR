@@ -15,8 +15,8 @@ library(ggplot2)
 library(corrplot)
 library(corrgram)
 
-project = "zookeeper" #change this
-threshold = 0.05 # To distinguish minor and major, it should be computed using some info
+project = "camel" #change this
+threshold = 0.4 # To distinguish minor and major, it should be computed using some info
                  # about the summary of the file
 
 
