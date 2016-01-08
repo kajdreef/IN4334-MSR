@@ -15,17 +15,19 @@ library(ggplot2)
 library(corrplot)
 library(corrgram)
 
-project = "camel" #change this
+project = "zookeeper" #change this
 threshold = 0.4 # To distinguish minor and major, it should be computed using some info
                  # about the summary of the file
 
 
 input = paste("../", project, "/dataset/", project, "_dataset.csv", sep="")
 output = paste("../", project, "/dataset/", project, "_metrics","_",toString(threshold),".csv", sep="")
+previous_impl_file = paste("../", project, "/dataset/", project, "_previous_implications.csv", sep="")
 
 # Import dataset
 data <-read.csv(file = input,head=TRUE,sep=",")
-
+previous_impl <- read.csv(file = previous_impl_file, head=TRUE, sep=",")
+  
 # Get the Interesting features for this 
 data_select <- data %>%
   select(sha, file, author, author_file_tot_added, author_file_tot_deleted, 
@@ -125,7 +127,14 @@ implicated <- data_select %>%
   group_by(sha, file) %>%
   summarise(implicated = mean(implicated)) #Mean of a value that is always the same, it gives the value itself
 
+metrics <- merge(metrics, previous_impl, by=c("sha", "file"), all=TRUE)
+
 metrics <- merge(metrics, implicated, by=c("sha", "file"), all=TRUE)
+
+#This is to check that there are no rows with NA in previous_implications,
+#because it would not make sense
+test <- transform(metrics,
+  previous_implications = is.na(metrics["previous_implications"]))
 
 # Write in file
 write.csv(metrics, file = output, row.names=FALSE)
