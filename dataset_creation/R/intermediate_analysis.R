@@ -8,10 +8,10 @@ library(randomForest)
 library(ROCR)
 
 #CHANGE THESE TWO PARAMETERS
-project = "maven" 
-threshold = 0.40         #To distinguish minor and major
+project = "zookeeper" 
+threshold = 0.05         #To distinguish minor and major
 corr_cutoff = 0.75
-sample_size = 2000       #Check the output of table(metrics$implicated) before setting
+sample_size = 800       #Check the output of table(metrics$implicated) before setting
 #SAMPLE SIZE MUST ALSO BE MULTIPLE OF K
 k = 10                  ### K-folds
 set.seed(65)
@@ -80,6 +80,8 @@ classify <- function(data, k){
   
   list <- 1:k
   sum = 0
+  listOfObs= list()
+  
   for (i in 1:k){
     # remove rows with id i from dataframe to create training set
     # select rows with id i to create test set
@@ -89,25 +91,39 @@ classify <- function(data, k){
     # run a random forest model
     train.rf <- randomForest(implicated ~ ., data=trainingset, importance=TRUE)
     round(importance(train.rf), 2)
-    print( train.rf$err.rate[nrow(train.rf$err.rate)])
-    sum = sum + train.rf$err.rate[nrow(train.rf$err.rate)]*100
     
-    
+    obs = mean(predict(train.rf) != trainingset$implicated)
+    listOfObs = c(listOfObs, obs)
+
     train.rf.pr = predict(train.rf, type="prob", newdata=testset)[,2]
     train.rf.pred = prediction(train.rf.pr, testset$implicated)
     train.rf.perf <- performance(train.rf.pred,"tpr","fpr")
 
   }
   
-  plot(train.rf.perf,main="ROC Curve for Random Forest",col=2,lwd=2)
-  abline(a=0,b=1,lwd=2,lty=2,col="gray")
-  
-  varImpPlot(train.rf)
-  
-  cat("Performance: ",sum/k)
+  return(listOfObs)
+
+#   sd = sapply(listOfObs,sd)
+#   print(sd)
+#   plot(train.rf.perf,main="ROC Curve for Random Forest",col=2,lwd=2)
+#   abline(a=0,b=1,lwd=2,lty=2,col="gray")
+#   varImpPlot(train.rf)
 }
 
 ########### START CLASSIFICATION
-# classify(metrics_classic, k)
-classify(metrics_all, k)
+list_classic <-classify(metrics_classic, k)
+list_all <- classify(metrics_all, k)
 
+df_classic <- data.frame(matrix(unlist(list_classic), nrow=k, byrow=T),stringsAsFactors=FALSE)
+df_all <- data.frame(matrix(unlist(list_all), nrow=k, byrow=T),stringsAsFactors=FALSE)
+
+df_classic <- transform(data.frame(sapply(list_classic,c)))
+df_classic <- transform(as.numeric(df_classic$sapply.list_classic..c.))
+
+df_all <- transform(data.frame(sapply(list_all,c)))
+df_all <- transform(as.numeric(df_all$sapply.list_all..c.))
+
+
+result <- t.test(as.numeric(list_classic), as.numeric(list_all),  paired=TRUE)
+print(result$p.value)
+print(result)
