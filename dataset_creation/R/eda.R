@@ -1,11 +1,21 @@
+# Clear history
+(rm(list=ls()))
+
 # Import libraries
 library(dplyr)
 library(ggplot2)
 library(corrplot)
 library(corrgram)
 
+#CHANGE THESE TWO PARAMETERS
+project = "zookeeper" 
+threshold = 0.05         #To distinguish minor and major
+#____________________________________________
+
+input = paste("../", project, "/dataset/", project, "_metrics","_",toString(threshold),".csv", sep="")
+
 # Import dataset
-metrics <-read.csv(file="../lucene/dataset/lucene_metrics.csv",head=TRUE,sep=",")
+metrics <-read.csv(file=input,head=TRUE,sep=",")
 #metrics <-read.csv(file="../camel/dataset/camel_metrics.csv",head=TRUE,sep=",")
 
 summary(metrics)
@@ -70,6 +80,9 @@ summary(aov1)
 aov1 = aov(metrics$comment_to_code_ratio ~ metrics$implicated)
 summary(aov1)
 
+aov1 = aov(metrics$previous_implications ~ metrics$implicated)
+summary(aov1)
+
 # Boxplots
 
 boxplot <- ggplot(data=metrics, aes(factor(implicated), commit_ownership))
@@ -113,3 +126,7 @@ boxplot + geom_boxplot()
 
 boxplot <- ggplot(data=metrics, aes(factor(implicated), comment_to_code_ratio))
 boxplot + geom_boxplot()
+
+boxplot <- ggplot(data=metrics, aes(factor(implicated), previous_implications))
+boxplot + geom_boxplot()
+
