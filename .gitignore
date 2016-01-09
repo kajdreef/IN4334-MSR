@@ -32,3 +32,7 @@ dataset_creation/R/.Rhistory
 *_blame_file.txt
 *_time_bug.txt
 *_time_fix.txt
+dataset_creation/R/datasets_environments/classification_CV_environment.RData
+dataset_creation/R/datasets_environments/statistical_inference_threshold_environment.RData
+dataset_creation/R/datasets_environments/statistical_significance_threshold_environment.RData
+*.RData
