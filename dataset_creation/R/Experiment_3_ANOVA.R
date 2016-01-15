@@ -51,8 +51,9 @@ classify <- function(data, k){
     
   }
   
-  return(listOfObs)
+  varImpPlot(train.rf)
   
+  return(listOfObs)
 }
 
 run <- function(project_name, threshold, c){

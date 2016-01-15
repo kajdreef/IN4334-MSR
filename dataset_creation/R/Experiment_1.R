@@ -36,7 +36,7 @@ list_all = list()
 classify <- function(data, k){
   listOfOOB = list()
   list <- 1:k
-  for (i in 1:k){
+  for (i in 1:1){
     # remove rows with id i from dataframe to create training set
     # select rows with id i to create test set
     trainingset <- subset(data, id %in% list[-i]) %>% select(-id)
@@ -52,13 +52,12 @@ classify <- function(data, k){
     train.rf.pr = predict(train.rf, type="prob", newdata=testset)[,2]
     train.rf.pred = prediction(train.rf.pr, testset$implicated)
     train.rf.perf <- performance(train.rf.pred,"tpr","fpr")
-    
   }
 
   plot(train.rf.perf,main="ROC Curve for Random Forest",col=2,lwd=2)
   abline(a=0,b=1,lwd=2,lty=2,col="gray")
   
-  # varImpPlot(train.rf)
+  varImpPlot(train.rf, type=1)
   
   return(listOfOOB)
 }
@@ -69,7 +68,6 @@ classify <- function(data, k){
 ##################################################################
 i = 1
 for(project in project_list){
-  project="lucene"
   threshold = threshold_list[[1]]
   
   input = paste("../", project, "/dataset/", project, "_metrics","_",toString(threshold),".csv", sep="")
@@ -135,14 +133,14 @@ for(project in project_list){
             implicated,id) %>%
     transform(implicated = as.factor(implicated))
   
-  ########### classic metrics + ORIGINAL #################################################################
+  ########### classic metrics + ORIGINAL ######################################################
   metrics_original <- sample_data %>%
     select( file_size, comment_to_code_ratio, previous_implications,
             commit_ownership, minor_contributors, major_contributors,
             implicated, id) %>%
     transform(implicated = as.factor(implicated))
   
-  ########### classic metrics + line_authorship #################################################################
+  ########### classic metrics + line_authorship ###############################################
   metrics_line_authorship <- sample_data %>%
     select( file_size, comment_to_code_ratio, previous_implications,
             line_authorship, total_authors,
@@ -192,7 +190,7 @@ for(project in project_list){
   line_based <- classify(metrics_line_based, k)
   list_line_based = c(list_line_based, line_based)
   cat("metrics_line_based: ", mean(unlist(line_based)), "\n")
-  
+
   all <- classify(metrics_all, k)
   list_all = c(list_all, all)
   cat("metrics_all: ", mean(unlist(all)), "\n\n")

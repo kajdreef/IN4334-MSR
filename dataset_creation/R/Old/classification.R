@@ -19,7 +19,7 @@ library(ROCR)
 
 set.seed(71)
 
-metrics <-read.csv(file="../lucene/dataset/lucene_metrics.csv",head=TRUE,sep=",")
+metrics <-read.csv(file="../../lucene/dataset/lucene_metrics.csv",head=TRUE,sep=",")
 #metrics <-read.csv(file="../camel/dataset/camel_metrics.csv",head=TRUE,sep=",")
 
 metrics_selected <- metrics %>%
