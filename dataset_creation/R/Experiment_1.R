@@ -36,7 +36,9 @@ list_all = list()
 classify <- function(data, k){
   listOfOOB = list()
   list <- 1:k
-  for (i in 1:1){
+  recall = list()
+  precision = list()
+  for (i in 1:k){
     # remove rows with id i from dataframe to create training set
     # select rows with id i to create test set
     trainingset <- subset(data, id %in% list[-i]) %>% select(-id)
@@ -52,8 +54,18 @@ classify <- function(data, k){
     train.rf.pr = predict(train.rf, type="prob", newdata=testset)[,2]
     train.rf.pred = prediction(train.rf.pr, testset$implicated)
     train.rf.perf <- performance(train.rf.pred,"tpr","fpr")
+    
+    # Get confusion matrix
+    cm <- train.rf$confusion
+    FP = cm[2]
+    TP = cm[4]
+    FN = cm[3]
+    recall = c(recall,TP/(FN + TP))
+    precision = c(precision, TP/(TP + FP))
   }
 
+  cat("Precision = ", mean(as.numeric(precision)), ", and recall = ", mean(as.numeric(recall)), "\n")
+  
   plot(train.rf.perf,main="ROC Curve for Random Forest",col=2,lwd=2)
   abline(a=0,b=1,lwd=2,lty=2,col="gray")
   
@@ -169,31 +181,31 @@ for(project in project_list){
   
   classic <- classify(metrics_classic, k)
   list_classic = c(list_classic, classic)
-  cat("metrics_classic: ", mean(unlist(classic)), "\n")
+  cat("metrics_classic OOB: ", mean(unlist(classic)), "\n\n")
   
   original <- classify(metrics_original, k)
   list_commit_based = c(list_commit_based, original)
-  cat("metrics_commit: ", mean(unlist(original)), "\n")
+  cat("metrics_commit OOB: ", mean(unlist(original)), "\n\n")
   
   deleted <- classify(metrics_deleted, k)
   list_deleted = c(list_deleted, deleted)
-  cat("metrics_deleted: ", mean(unlist(deleted)), "\n")
+  cat("metrics_deleted OOB: ", mean(unlist(deleted)), "\n\n")
   
   added <- classify(metrics_added, k)
   list_added = c(list_added, original)
-  cat("metrics_added: ", mean(unlist(added)), "\n")
+  cat("metrics_added OOB: ", mean(unlist(added)), "\n\n")
   
   line_authorship <- classify(metrics_line_authorship, k)
   list_line_authorship = c(list_line_authorship, line_authorship)
-  cat("metrics_line_authorship: ", mean(unlist(line_authorship)), "\n")
+  cat("metrics_line_authorship OOB: ", mean(unlist(line_authorship)), "\n\n")
   
   line_based <- classify(metrics_line_based, k)
   list_line_based = c(list_line_based, line_based)
-  cat("metrics_line_based: ", mean(unlist(line_based)), "\n")
+  cat("metrics_line_based OOB: ", mean(unlist(line_based)), "\n\n")
 
   all <- classify(metrics_all, k)
   list_all = c(list_all, all)
-  cat("metrics_all: ", mean(unlist(all)), "\n\n")
+  cat("metrics_all OOB: ", mean(unlist(all)), "\n\n\n\n")
   
   i = i + 1
 }
