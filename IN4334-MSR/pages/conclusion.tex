@@ -1,0 +1,8 @@
+\section{Conclusion \& Future Work}
+In this paper we extended the past studies of the effect of code ownership on software quality. We used the concept of implicated code to identify defective file versions over the development history of five open-source software project, and we built a model capable of distinguishing them from the non-defective ones. Our model is built using the Random Forest technique and it includes an exhaustive set of ownership metrics, considering different granularities (line-based and commit-based) and different thresholds to distinguish minor and major contributors, together with some authorship (memory-less ownership) and classic code metrics. 
+
+All the metrics are computed with a novel approach that ensures that defective files are really characterized in the revision where defective code is introduced.
+
+This classifier with all metrics reached an average OOB of the 23\% over the considered projects, with a relative improvement of the 22\% over a model that consider only classic code metrics. Our results also show that ownership metrics computed with line-based granularity are more effective than the commit-based ones and that changing the threshold used to distinguish minor and major contributors doesn't affect the results in a significant way.
+
+Future research should be done to consider more projects with programming languages different from Java, and to study how changing the granularity of the considered artifacts (e.g. folders or packages instead of files) and the history time period affects the results.

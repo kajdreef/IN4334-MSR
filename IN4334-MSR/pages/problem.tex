@@ -1,0 +1,51 @@
+\section{The problem}
+The general problem that is targeted in this paper is that building software defect prediction models is a challenging activity, and one of its main difficulties is that it is highly project-dependant~\cite{zimmermann2009cross-project}.
+In particular we address this problem for models built using \textit{code ownership} metrics. Code ownership is a measurement of the proportion of contribution of the developers to a source code artifact over a certain period of time, in terms of code changes (e.g. number of commits) \cite{Greiler:replication}. It describes whether the \textit{responsibility} for a certain software artifact is spread around many developers, or if there is a single person that can be considered its ``owner'';  it can also be interpreted as a measure of the \textit{expertise} of a developer with respect to the code artifact~\cite{bird:original}.
+
+%past studies showed that, on Microsoft products, code artifacts without a clear responsible are more defect prone \cite{bird:original,  Greiler:replication}. In these studies ownership is also interpreted as a measure of the \textit{expertise} of a developer with respect to the code artifact.
+
+This work addresses the more specific problem that currently it is difficult to generalize the effect of code ownership on software quality; previous studies show contrasting result when trying to correlate these two aspects~\cite{bird:original, Foucault:oss, Greiler:replication}. What makes the problem complicated is that code ownership highly depends on the organizational structure of the development team and on the developers behaviour.
+
+\subsection{Existing solutions and limitations}
+\label{sec:existing_solutions}
+The main source of inspiration for us comes from Bird et
+al.~\cite{bird:original}, who did, to our knowledge, one of the first empirical studies of the effects that code ownership has on software quality. They used the concept of ownership in a defect prediction model built for Microsoft Windows; to do that they extracted the following metrics from the software artifacts: 
+\begin{itemize}
+\item \textit{Ownership}: proportion of ownership for the highest contributor;
+\item \textit{Minor}: number of contributors with a proportion of ownership that is below a certain threshold (minor contributors);
+\item \textit{Major}: number of contributors with a proportion of ownership that is above the threshold used for the minors (major contributors);
+\item \textit{Total}: total number of contributors.
+\end{itemize}
+
+As artifacts they considered the software binaries of a Microsoft Windows release and as variable to measure the proportions of ownership on every artifact they used the number of commits that changed it before the release, with a 5\% threshold to identify minor and major contributors.
+These metrics have been then reused and revisited in further studies~\cite{Foucault:oss, Greiler:replication}, targeting different projects (Microsoft and OSS), different kind of artifacts (source files, source code folders and Java packages) and changing the threshold (5\%, 20\% and 50\%), but using the same variable to measure the ownership and again computing it on the artifacts of a specific software release.
+
+In the cited works we see the following main shortcomings:
+\begin{enumerate}
+    \item The metrics are computed on the code artifacts of a specific software release and then correlated with the presence of defects in it. The problem is that in this way the metrics are not extracted when the defects are introduced, but later, so they don't capture the state of the code in the moment that it becomes defective;
+    \item The variable used to measure the ownership is the number of commits to the code artifact, a coarse-grained measure of the code changes, and none of the cited studies experimented different granularities;
+    \item None of the previous works did an explicit analysis on the impact that changing the threshold used to distinguish minor and major contributors has on the study results;
+\end{enumerate}
+
+In this work we try to solve these problems; we think that taking into account these three factors results in ownership metrics that better adapt to the specific characteristics of the software project. This leads to more generalizable outcomes, so we address the more general problem described at the beginning of this Section.
+
+%% OLD STUFF
+%We base some of 
+%the ownership metrics that we consider in this work on the a %set of metrics introduced by Bird et al. \cite{bird:original} and then reused and revisited in further studies \cite{Foucault:oss, Greiler:replication}. These metrics refer to a software artifact and are:
+%\begin{itemize}
+%\item \textit{Ownership}: proportion of ownership for the highest contributor;
+%\item \textit{Minors}: number of contributors with a proportion of ownership that is below a certain threshold;
+%\item \textit{Majors}: number of contributors with a proportion of ownership that is above the threshold for the minor;
+%\item \textit{Total}: total number of contributors.
+%\end{itemize}
+
+%For these metrics the proportion of ownership can be measured using different variables: all the cited past studies used the number of commits to the artifact \cite{bird:original,  Greiler:replication, Foucault:oss}. Different threshold were used to distinguish minor and major contributors (5\% \cite{bird:original, Foucault:oss}, 20\% and 50\% \cite{Greiler:replication}), but nobody did a more explicit analysis on the impact of the threshold on
+
+
+% ___________________
+%Previous studies always computed the code ownership process metrics without adapting them to the specific characteristics of the considered software project, and without taking into account that to find a relationship between these metrics and software defects their computation should be performed on the revision of the software that captures its state just after the introduction of these defects.
+
+%_________________________________________________________
+
+%All the cited studies considered only the commit count to measure the proportion of ownership of a developer, but not in all the projects the commits can be considered equal, and maybe it makes sense, for example, to use a more fine-grained approach. 
+%Furthermore, think about a study that computes the ownership metrics on the artifacts of a specific software release, considering an artifact as defective because a bug affects it in that release: this bug could have been introduced way before the release, but was discovered only after it. That's why we think that it could make more sense to go back to the version of the artifact that really represent the defect introduction and then compute the ownership metrics.

@@ -1,0 +1,18 @@
+\section{Threats to Validity}
+
+Like every empirical study, this one too has threats to validity that must be considered.
+
+\textbf{External validity}:
+%For this study only five study subjects were taken into consideration, this is because of a limited number of large open-source projects the issues were available from and met our criteria, see Section \ref{sec:subjects}. As a result our conclusion are not necessarily generalizable to other software systems. 
+All the five subjects of this study are Apache OSS projects that use JIRA with the same convention and are mainly programmed in Java (we only consider Java files). Because of that it could be the case that for different scenarios the described technique leads to different or contrasting results (e.g. on proprietary software or considering a different programming language).
+
+\textbf{Construct validity.} 
+Not all the commits that mention a JIRA key and id couple are necessarily fixes to the related bug. Furthermore, in a bug fix we consider all the deleted or changed lines to spot the corresponding implicated code, but not all the code touched is necessarily related to the bug fix. The fact that single commits often include unrelated changes was already identified as the problem of Tangled Changes~\cite{herzig2013impact}, and it is currently an active research topic. This work also includes all the JIRA related threats, like the fact that some developers could not adhere to the bug convention.
+
+When determining the implicated files we do not consider the fact that a file version can be implicated more than one time. We do that because ultimately our goal is to determine when a file is defective and not to predict how many defects will it introduce, but taking into account that factor could be important: in Lucene-Solr, for example, in the 27.3\% of the cases a file is implicated more than once.
+
+To build our dataset we discard the first commits, the ones that set up the repository, but we consider all the other outliers because we assume that unusual commits are often the ones that lead to defects; this could have biased some of our results. We also considered the whole available development history for every project, and this could lead some metrics to converge, especially the line based ones: a developer could be marked as a major contributors even if there are no more lines authored by him in the file. Further investigation with different time windows should be done.
+We also do not perform any distinction between test and non-test Java files, but it could be interesting to consider this factor.
+
+% Even if we consider this method a way of computing ownership that better suites the project characteristics, resulting in more generalizable results, we do not claim our outcomes to be general: we investigated Apache OSS projects considering only Java files, so in different scenarios the described technique could lead to different or contrasting results. 
+<MISSING: Check the division between validity classes (external, construct, content etc.)>
