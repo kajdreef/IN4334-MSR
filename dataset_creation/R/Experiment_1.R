@@ -133,28 +133,28 @@ for(project in project_list){
   
   ########### classic metrics + ADDED #################################################################
   metrics_added <- sample_data %>%
-    select( file_size, comment_to_code_ratio, previous_implications,
+    select( file_size, comment_to_code_ratio, previous_implications, 
             line_ownership_added, lines_added_minor_contributors, lines_added_major_contributors,
             implicated,id) %>%
     transform(implicated = as.factor(implicated))
   
   ########### classic metrics + DELETED #################################################################
   metrics_deleted <- sample_data %>%
-    select( file_size, comment_to_code_ratio, previous_implications,
+    select( file_size, comment_to_code_ratio, previous_implications, 
             line_ownership_deleted, lines_deleted_minor_contributors, lines_deleted_major_contributors,
             implicated,id) %>%
     transform(implicated = as.factor(implicated))
   
-  ########### classic metrics + ORIGINAL ######################################################
-  metrics_original <- sample_data %>%
-    select( file_size, comment_to_code_ratio, previous_implications,
+  ########### classic metrics + Commit based ######################################################
+  metrics_commit <- sample_data %>%
+    select( file_size, comment_to_code_ratio, previous_implications, total_contributors,
             commit_ownership, minor_contributors, major_contributors,
             implicated, id) %>%
     transform(implicated = as.factor(implicated))
   
   ########### classic metrics + line_authorship ###############################################
   metrics_line_authorship <- sample_data %>%
-    select( file_size, comment_to_code_ratio, previous_implications,
+    select( file_size, comment_to_code_ratio, previous_implications, 
             line_authorship, total_authors,
             implicated, id) %>%
     transform(implicated = as.factor(implicated))
@@ -162,7 +162,7 @@ for(project in project_list){
   
   ########### classic metrics #################################################################
   metrics_classic <- sample_data %>%
-    select( file_size, comment_to_code_ratio, previous_implications,
+    select( file_size, comment_to_code_ratio, previous_implications, 
             implicated, id) %>%
     transform(implicated = as.factor(implicated))
   
@@ -171,7 +171,7 @@ for(project in project_list){
     select( line_authorship, total_authors,
             line_ownership_deleted, lines_deleted_minor_contributors,
             line_ownership_added, lines_deleted_minor_contributors,
-            file_size, comment_to_code_ratio, previous_implications,
+            file_size, comment_to_code_ratio, previous_implications, 
             implicated, id) %>%
     transform(implicated = as.factor(implicated))
   
@@ -183,7 +183,7 @@ for(project in project_list){
   list_classic = c(list_classic, classic)
   cat("metrics_classic OOB: ", mean(unlist(classic)), "\n\n")
   
-  original <- classify(metrics_original, k)
+  original <- classify(metrics_commit, k)
   list_commit_based = c(list_commit_based, original)
   cat("metrics_commit OOB: ", mean(unlist(original)), "\n\n")
   
