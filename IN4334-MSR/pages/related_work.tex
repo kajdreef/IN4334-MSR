@@ -1,3 +1,6 @@
+%!Tex root=../main.tex
+
+
 \section{Related Work}
 \label{sec:rel}
 
@@ -19,7 +22,7 @@ Focault et al.~\cite{Foucault:oss} replicated the above study on seven open-sour
 Another replication of the study from Bird et al. was recently performed by Greiler et al. \cite{Greiler:replication}, including also the intuition from Focault et al. of changing the granularity of the code artifacts: they used folders and files. This study was again targeted on Microsoft projects and confirms the result of \cite{bird:original}. They show that it is also possible to classify with a high precision defective files using the ownership metrics.
 
 In this paper, we took a different approach; we investigated how risky a commit can be depending on its author's ownership. Thus, here we measure ownership-quality relationship at commit granularity, as opposed to release granularity like our predecessors. To build our model we adapted the concept of {\em implicated code} by Rahman et al.~\cite{Rahman:blame} (see Section~\ref{sec:method}). The concept of implicated code was also used in other bug prediction literature including Sliwersky et al.~\cite{sliwerski2005changes}, Purushothaman et al.~\cite{purushothaman2004towards}, Ray et al.~\cite{ray2015naturalness}, etc.
-
+\bray{Review related work might have some relevance here.}
 \bray{Blend this later.}
 A number of prior studies also tried to use a different granularity to compute the ownership metrics or to perform bug prediction using line-based approaches: Munson et al.~\cite{munson1998code} introduced the concept of code churn as a measure of code line changes, Meng et al.~\cite{meng2013mining} considered fine-grained code changes over-time to measure the authorship in an accurate way and Hata et al. \cite{hata2012bug} computed ownership at a method level for bug prediction.
 
