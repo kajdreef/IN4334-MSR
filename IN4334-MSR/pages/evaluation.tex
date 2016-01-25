@@ -65,8 +65,8 @@ We evaluate the constructed classifiers with the out-of-bag error rate (OOB) ave
 
 In Table \ref{tab:granularity_lucene} the results for the project Lucene-Solr can be found. It can be noted here that the different granularities between metrics have a significant influence on the performance of the classifier. Line-based metrics (deleted, added, authorship) give a larger performance increase than the commit-based ones. This effect is highlited also in Figure~ \ref{fig:importance_var_lucene}: it shows the importance of the single metrics for Lucene-Solr. Eventually, Figure~\ref{fig:roc_lucene} shows the corresponding ROC curve. Similar results come from the other projects.
 
-Table \ref{tab:sum_experiment_1_results} shows a summary of the results of the experiment. Using all the metrics the average OOB is 22.99\% which gives an average increase of 21.71\%  in performance over the classic metrics. For what concerns the granularity, line-based metrics perform on average 15\% better than commit-based metrics. 
-All the p-values resulting from the significance test performed on the improvements are far below the 0.05 significance level, meaning that all the improvements over the classic metrics are statistically significant. 
+Table \ref{tab:sum_experiment_1_results} shows a summary of the results of the experiment. Using all the metrics the average OOB is 22.99\% which gives an average increase of 21.71\%  in performance over the classic metrics. For what concerns the granularity, line-based metrics perform on average 15\% better than commit-based metrics.
+All the p-values resulting from the significance test performed on the improvements are far below the 0.05 significance level, meaning that all the improvements over the classic metrics are statistically significant.
 
 
 % \begin{table}[ht]
@@ -208,11 +208,10 @@ Average & 29.22\% & 26.10\% & 22.17\% & 22.99\% & 21.71\% & 24.27\%\\
 
 \subsubsection{Experiment design}
 
-In the previous experiment Random Forest was used to determine the performance of different granularities. In this experiment we will take it a step further by taking a look at the individual metrics to see how statistically significant they are when it comes to each project and different thresholds. The goal is to determine which metrics are significant, does the significance change depending on the threshold, and to get an indication to see if there is a common group of metrics that is significant for the selected study subjects.
+In the previous experiment we used Random Forest to determine the performance of different granularities. In this experiment we will take it a step further by taking a look at the individual metrics to see how statistically significant they are. The goal is to determine which metrics are significant, checking also if the significance changes depending on the threshold, and to determine if there is a common group of metrics that is significant for all the selected study subjects.
 
-We determine the statistically significant metrics by running Logistic Regression on the dataset with all the metrics and without feature selection, since this technique automatically detects which ones are not linearly dependent with each other. Also logistic regression is the best choice, because it automatically computes the significance of every variable, in terms of p-value.
+We determine the statistically significant metrics by running Logistic Regression on the dataset without feature selection, since this technique automatically detects which ones are not linearly dependent with each other. Logistic regression is a good choice in this case: this because it automatically computes the significance of every variable in terms of p-value.
 
-%Significance is also in this case measured using the p-value: the lower is the p-value, the more significant is the variable.  but it can also be possible that logistic regression outputs NA, this means that the variable is linearly dependent with an other variable and because of that not taken into consideration.
 
 \begin{table}[ht]
 \centering
@@ -234,11 +233,11 @@ NA      & NA\\
 
 \subsubsection{Results}
 
-Table~\ref{tab:significant_sym} shows how to interpret the results of the Logistic Regression:  NA means that the variable is considered linearly dependent with an other variable and because of that it is not taken into consideration. Table~\ref{tab:logistic_regression5} summarizes the results of the significance of the different metrics for the 5\% threshold.
+Table~\ref{tab:significant_sym} shows how to interpret the results of the Logistic Regression:  NA means that the metric is considered linearly dependent with another one and because of that it is not taken into consideration. Table~\ref{tab:logistic_regression5} summarizes the results of the significance of the different metrics for the 5\% threshold.
 
-The classic metrics (file size, previous implication, comment to code ratio, and total contributors) are, as expected, highly significant. It can be noted that the line authorship is also highly significant for all the projects, while the rest of the ownership metrics significance values vary between the various projects, meaning they are probably project dependent. In the table it can be found that for every project at least three ownership metrics (without considering the authorship) are statistically significant (with a 0.05 significance level).   
+The classic metrics are, as expected, highly significant. It can be noted that the total contributors and line authorship are also highly significant for all the projects, while the rest of the ownership metrics significance values vary a lot, meaning they are probably more project dependent. Despite that, for every project it is possible to see that at least five of these ownership metrics are statistically significant (considering a 0.05 significance level).
 
-When looking also at the other thresholds there is not a clear improvement, meaning that when the threshold changes the change in the significance of the metrics is not relevant: while some of them become more significant, others result to be less important. For example, when considering a 10\% threshold, \textit{lines\_added\_major\_contributors} becomes more significant for Lucene-Solr but also less significant for Mahout, in comparison to the 5\% threshold scenario (see Tables~\ref{tab:logistic_regression5} and~\ref{tab:logistic_regression10}).
+Table \ref{tab:experiment2_threshold} shows the influence that changing the threshold has on the significance. It can be seen there is no clear improvement in significance for the metrics, meaning that when the threshold changes the change in the significance of the metrics is not relevant: while some of them become more significant, others result to be less important. For example, when considering a 10\% threshold, \textit{lines\_added\_major\_contributors} becomes more significant for Lucene-Solr but also less significant for Mahout, in comparison to the 5\% threshold scenario. For other threshold values the results are similar.
 
 
 \begin{table*}[ht]
@@ -254,7 +253,7 @@ comment to code ratio            & \textbf{.}           & \textbf{$\ast\ast\ast$
 \hline
 commit ownership                 &                      & \textbf{$\ast\ast\ast$}   & \textbf{$\ast$}      & \textbf{$\ast\ast\ast$}    & \textbf{.}         \\
 minor contributors               & NA                   & NA             & \textbf{$\ast\ast$}     & NA              & NA                 \\
-major contributors               & \textbf{$\ast\ast\ast$}         & \textbf{$\ast\ast\ast$}   & NA              & \textbf{$\ast\ast\ast$}    & \textbf{$\ast\ast\ast$}       \\ 
+major contributors               & \textbf{$\ast\ast\ast$}         & \textbf{$\ast\ast\ast$}   & NA              & \textbf{$\ast\ast\ast$}    & \textbf{$\ast\ast\ast$}       \\
 total contributors & \textbf{$\ast\ast\ast$} & \textbf{$\ast\ast\ast$} & \textbf{$\ast\ast\ast$} & \textbf{$\ast\ast\ast$} & \textbf{$\ast\ast\ast$} \\\hline
 total authors                    & \textbf{$\ast\ast\ast$}         & \textbf{}      & \textbf{}       & \textbf{}       & \textbf{$\ast\ast\ast$}       \\
 line authorship                  & \textbf{$\ast\ast\ast$}         & \textbf{$\ast\ast\ast$}   & \textbf{$\ast\ast\ast$}    & \textbf{$\ast\ast\ast$}    & \textbf{$\ast\ast\ast$}       \\ \hline
@@ -272,34 +271,32 @@ lines deleted major contributors & \textbf{$\ast$}           & \textbf{}      & 
 
 \begin{table*}[ht]
 \centering
-\caption{Results of logistic regression with the metrics with a 10\% threshold, see Table~\ref{tab:significant_sym} for the interpretation.}
-\label{tab:logistic_regression10}
-\begin{tabular}{|c|c|c|c|c|c|}
+\caption{Major contributors metrics with different granularities and the influence of the threshold for different projects}
+\label{tab:experiment2_threshold}
+\begin{tabular}{|c|c|c|c|c|c|c|}
 \hline
-\textbf{Metrics} & \textbf{Lucene-solr} & \textbf{Camel} & \textbf{Mahout} & \textbf{Maven} & \textbf{Zookeeper} \\
+\textbf{Threshold} & \textbf{Metrics} & \textbf{Lucene-solr} & \textbf{Camel} & \textbf{Mahout} & \textbf{Maven} & \textbf{Zookeeper} \\
 \hline
-file size & \textbf{} & \textbf{$\ast\ast\ast$} & \textbf{$\ast\ast\ast$} & \textbf{$\ast\ast\ast$} & \textbf{} \\
-previous implications & \textbf{$\ast\ast\ast$} & \textbf{$\ast\ast\ast$} & \textbf{$\ast\ast\ast$} & \textbf{} & \textbf{$\ast\ast\ast$} \\
-comment to code ratio & \textbf{$\ast$} & \textbf{$\ast\ast\ast$} & \textbf{$\ast\ast\ast$} & \textbf{$\ast\ast\ast$} & \textbf{$\ast\ast\ast$} \\
+\multirow{3}{*}{5\%} & major contributors & \textbf{$\ast\ast\ast$} & \textbf{$\ast\ast\ast$} & NA & \textbf{$\ast\ast\ast$} & \textbf{$\ast\ast\ast$} \\
+ & lines added major contributors & \textbf{} & \textbf{$\ast\ast$} & \textbf{.} & \textbf{} & \textbf{$\ast\ast$} \\
+ & lines deleted major contributors & \textbf{$\ast$} & \textbf{} & \textbf{$\ast$} & \textbf{$\ast\ast$} & \textbf{} \\
 \hline
-major contributors & \textbf{$\ast\ast\ast$} & \textbf{} & \textbf{} & \textbf{} & \textbf{$\ast\ast\ast$} \\
-commit ownership & \textbf{} & \textbf{$\ast\ast\ast$} & \textbf{$\ast\ast$} & \textbf{$\ast\ast$} & \textbf{} \\
-minor contributors & NA & \textbf{} & NA & NA & NA \\
-total contributors & \textbf{$\ast\ast\ast$} & \textbf{$\ast\ast\ast$} & \textbf{$\ast\ast\ast$} & \textbf{$\ast\ast\ast$} & \textbf{$\ast\ast\ast$} \\
+\multirow{3}{*}{10\%} & major contributors & \textbf{$\ast\ast\ast$} & \textbf{} & \textbf{} & \textbf{} & \textbf{$\ast\ast\ast$} \\
+ & lines added major contributors & \textbf{$\ast\ast$} & \textbf{$\ast\ast\ast$} & \textbf{} & \textbf{$\ast\ast$} & \textbf{$\ast\ast\ast$} \\
+ & lines deleted major contributors & \textbf{} & \textbf{} & \textbf{} & \textbf{$\ast\ast\ast$} & \textbf{} \\
 \hline
-total authors & \textbf{$\ast\ast\ast$} & \textbf{} & \textbf{} & \textbf{} & \textbf{$\ast\ast\ast$} \\
-line authorship & \textbf{$\ast\ast\ast$} & \textbf{$\ast\ast\ast$} & \textbf{$\ast\ast\ast$} & \textbf{$\ast\ast\ast$} & \textbf{$\ast\ast\ast$} \\
+\multirow{3}{*}{20\%} & major contributors & \textbf{$\ast\ast\ast$} & \textbf{$\ast\ast$} & \textbf{$\ast\ast$} & \textbf{$\ast\ast\ast$} & \textbf{.} \\
+ & lines added major contributors & \textbf{$\ast\ast\ast$} & \textbf{} & \textbf{.} & \textbf{} & \textbf{} \\
+ & lines deleted major contributors & \textbf{} & \textbf{} & \textbf{$\ast\ast\ast$} & \textbf{$\ast\ast\ast$} & \textbf{} \\
 \hline
-line ownership added & \textbf{} & \textbf{$\ast\ast\ast$} & \textbf{$\ast\ast$} & \textbf{$\ast\ast$} & \textbf{} \\
-lines added minor contributors & NA & NA & NA & NA & NA \\
-lines added major contributors & \textbf{$\ast\ast$} & \textbf{$\ast\ast\ast$} & \textbf{} & \textbf{$\ast\ast$} & \textbf{$\ast\ast\ast$} \\
+\multirow{3}{*}{30\%} & major contributors & \textbf{$\ast\ast\ast$} & \textbf{} & \textbf{$\ast$} & \textbf{} & \textbf{} \\
+ & lines added major contributors & \textbf{$\ast\ast\ast$} & \textbf{$\ast\ast\ast$} & \textbf{$\ast\ast$} & \textbf{} & \textbf{} \\
+ & lines deleted major contributors & \textbf{} & \textbf{} & \textbf{$\ast\ast\ast$} & \textbf{$\ast\ast\ast$} & \textbf{} \\
 \hline
-line ownership deleted & \textbf{$\ast\ast$} & \textbf{$\ast\ast\ast$} & \textbf{$\ast\ast\ast$} & \textbf{} & \textbf{$\ast$} \\
-lines deleted minor contributors & NA & NA & NA & NA & NA \\
-lines deleted major contributors & \textbf{} & \textbf{} & \textbf{} & \textbf{$\ast\ast\ast$} & \textbf{} \\
-\hline
-\textbf{Accuracy} & \textbf{0.63125} & \textbf{0.64375} & \textbf{0.695} & \textbf{0.6725} & \textbf{0.5875}\\
-\hline
+\multirow{3}{*}{40\%} & major contributors & \textbf{$\ast\ast\ast$} & \textbf{} & \textbf{$\ast\ast$} & \textbf{$\ast$} & \textbf{} \\
+ & lines added major contributors & \textbf{$\ast\ast\ast$} & \textbf{$\ast\ast\ast$} & \textbf{$\ast\ast$} & \textbf{} & \textbf{.} \\
+ & lines deleted major contributors & \textbf{} & \textbf{} & \textbf{$\ast$} & \textbf{$\ast\ast\ast$} & \textbf{}\\
+ \hline
 \end{tabular}
 \end{table*}
 
@@ -312,15 +309,7 @@ lines deleted major contributors & \textbf{} & \textbf{} & \textbf{} & \textbf{$
 
 Research question 2b has to do with the threshold used to distinguish minor and major contributors and with how much does it influence the performance of the classifier. The goal of the experiment is to determine the effect of the different thresholds that we selected to use: \texttt{0.05}, \texttt{0.10}, \texttt{0.20}, \texttt{0.30}, and \texttt{0.40}.
 
-%To be able to determine the influence of the minor-major threshold 5 datasets are created as described in Section \ref{sec:history-dataset} where the following metrics are computed with the different minor-major thresholds:
-%\begin{itemize}
-%    \item Minor/major contributors based on number of commits;
-%    \item Number of minor/major contributors based on added lines;
-%    \item Number of minor/major contributors based on deleted lines.
-%\end{itemize}
-%These metrics are chosen because they depend on the minor-major threshold.
-
-As said in Section~\ref{sec:metrics}, for every project we computed a metrics dataset for each one of the thresholds. In this experiment we use again the Random Forest technique to build a classifier for every threshold and every project, considering only the metrics that depend on the threshold, so all the ones that measure minor and major contributors (see Table~\ref{tab:metrics}). This results in 25 classifiers. 
+As said in Section~\ref{sec:metrics}, for every project we computed a metrics dataset for each one of the thresholds. In this experiment we use again the Random Forest technique to build a classifier for every threshold and every project, considering only the metrics that depend on the threshold, so all the ones that measure minor and major contributors (see Table~\ref{tab:metrics}). This results in 25 classifiers.
 
 The performance of every classifier is measured using 10-folds cross-validation and the OOB error: since we used only features that depend from the threshold, the difference between these resulting models is only related to its variation.
 
@@ -355,7 +344,7 @@ Zookeeper & 33.44\% & 33.72\% & 34.82\% & 36.93\% & 34.73\% \\
 
 \textbf{RQ1,2}: Based on the results of the experiments we can say that ownership metrics are an indication for the presence of implicated code. Over the 5 projects we got an average classifier OOB of 22\% with a significant improvement over the one that uses only classic metrics (22\%).
 
-\textbf{RQ2a}: The level of granularity used to compute the ownership metrics is important: our results show that line-based metrics give a significant improvement and are on average 12\% more effective than the commit-based ones. The authorship can also be considered a line-based ownership metric; it gives even a better improvement and it is statistically significant for all the projects. %When looking at the significance of metrics we can see that commit and line ownership added/deleted are significant for most projects, but also seem to be different per project. Line authorship is the only metric that is highly significant for all the projects.
+\textbf{RQ2a}: The level of granularity used to compute the ownership metrics is important: our results show that line-based metrics give a significant improvement and are on average 15\% more effective than the commit-based ones. The authorship can also be considered a line-based ownership metric; it gives even a better improvement and it is statistically significant for all the projects. %When looking at the significance of metrics we can see that commit and line ownership added/deleted are significant for most projects, but also seem to be different per project. Line authorship is the only metric that is highly significant for all the projects.
 
 \textbf{RQ2b}: For what concerns the threshold used to distinguish minor and major contributors, the results show that its value doesn't influence the classifier accuracy in a statistically significant way; this is due to the fact that the metrics that depend on the threshold are in general not so effective in this setup.
 
@@ -370,7 +359,7 @@ Zookeeper & 33.44\% & 33.72\% & 34.82\% & 36.93\% & 34.73\% \\
 
 % Greiler et al.:
 %   - own. metrics are effective
-%   - most effective: (1) Total (2) Ownership 
+%   - most effective: (1) Total (2) Ownership
 %   - Minor = least important
 
 % Rahman et al.
@@ -382,6 +371,3 @@ The obtained results show that our work contributes to the research in this fiel
 Bird et. al~\cite{bird:original} and Greiler et al.~\cite{Greiler:replication} showed that ownership metrics are indicative for software quality in Microsoft projects while Foucault et al.~\cite{Foucault:oss} showed the opposite regarding OSS projects. Our results confirm the fact that the effect of code ownership on software quality is highly project dependant, but we can consider ownership metrics indicative for software quality also for OSS projects, since for each one of our case studies three or more of them are significant for the classification (see Table~\ref{tab:logistic_regression5}) and considering them improves a classic code metrics model in a significant way (see Table~\ref{tab:sum_experiment_1_results}). Our result are in contrast with the ones from Focault et al.~\cite{Foucault:oss}, and the reasons could be that: (1) we try to classify defective files instead of correlate the metrics with the number of defects; (2) we consider also ownership at a line-based granularity; (3) we consider also memory-less ownership (authorship).
 
 Looking at the metrics significance in Table~\ref{tab:logistic_regression5} we can see that \textit{total contributors} and \textit{line authorship} are the only non-classic metrics that are always significant: this confirms the results from Greiler et al.~\cite{Greiler:replication} and Rahman et al. respectively. This outcome makes sense, since the two mentioned studies tried to distinguish defective and non-defective artifacts (i.e. Microsoft source files and C language implicated code chunks) with approaches similar to our (i.e. classification). \textit{Commit ownership} was also shown to be important by Bird et al.~\cite{bird:original} and Greiler et al.~\cite{Greiler:replication}, and for us the same holds in three out of five projects. Minor and major contributors are highly dependant from each other (reasonable, since they sum to the \textit{total contributors}): for every project one of them is discarded, while the other one results significant, confirming what stated by Bird et al.~\cite{bird:original}.
-
-
-
