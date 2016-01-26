@@ -31,28 +31,7 @@ We selected five different software projects as study subjects, all written usin
 For each project we decided to  consider its whole development history until the 01/01/2015: this because we had issues extracted in JSON until the half of the year, and we only wanted to consider code for which the most of the issues were already discovered and fixed. We also decided to discard some of the first days of commits from the data extracted from the repositories, because these are the commits needed to setup the project repository or the git mirror. %As a result they commit sometimes years of data in one commit so the whole history there is lost. 
 We did this last step by manually checking the messages of the first available commits.
 
-\begin{table*}[ht]
-\centering
-\caption{Characteristics of the studied projects %over their history
-(until 01/01/2015)}
-\label{tab:projects}
-\footnotesize
-\begin{tabular}{|l|c|c|c|c|c|}
-\hline
-\textbf{Project} & \textbf{LOC} & \textbf{Contributors} & \textbf{Commits} & \textbf{Application} \\%& \textbf{Period}\\
-\hline
-Camel   & 103883  & 125 & 18371  & Rule-based routing and mediation engine \\
-\hline
-Lucene-solr & 220632 & 55 & 13841  & Information retrieval library and search platform\\
-\hline
-Mahout      & 177317 & 31 & 3163 &   Implementation of scalable machine-learning algorithms \\
-\hline
-Maven       & 129132 & 51 & 9909 &   Build manager \\
-\hline
-Zookeeper   & 108132 & 13  & 1283 &  Distributed system configuration service \\
-\hline
-\end{tabular}
-\end{table*}
+\input{tables/subject_systems}
 
 \subsection{Research steps}
 
