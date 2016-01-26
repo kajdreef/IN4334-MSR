@@ -50,7 +50,8 @@ In the first step of our research we create, for every software project, a datas
 
 We then add to this dataset, once extracted, another column that says when a file is implicated, using the approach described in Section~\ref{sec:implicated}.
 
-A complete list of the columns contained in the dataset can be found in Table~\ref{tab:history}. Some of them contain information that are not related to the single author, but to the file or the commit: in this case their value will be the same for more than one line.
+A complete list of the columns contained in the dataset can be found in
+\Cref{tab:modeled_information}. Some of them contain information that are not related to the single author, but to the file or the commit: in this case their value will be the same for more than one line.
 
 An example of this procedure is shown in Figure~\ref{fig:history_example} and Table~\ref{tab:history_example}, it shows only information about commits and lines added but it can be used to better understand the described methodology.
 
@@ -67,7 +68,7 @@ An example of this procedure is shown in Figure~\ref{fig:history_example} and Ta
 \begin{tabular}{|c|c|c|c|c|c|c|c|}
 \cline{3-8}
 \multicolumn{1}{c}{} & 
-\multicolumn{1}{c}{} & \multicolumn{6}{|c|}{\textbf{columns (see Table~\ref{tab:history})}} \\
+\multicolumn{1}{c}{} & \multicolumn{6}{|c|}{\textbf{columns (see \Cref{tab:modeled_information})}} \\
 \hline
 \textbf{file} & \textbf{sha} & \textbf{4} & \textbf{5} & \textbf{6} & \textbf{7} & \textbf{11} & \textbf{12}
 \\
@@ -112,69 +113,29 @@ C.java & \#3 & Alice  & 20                        & 20                          
 \label{tab:metrics_example}
 \end{table}
 
-\begin{table*}[ht]
-\centering
-\caption{Columns of the history data set}
-\label{tab:history}
-\footnotesize
-\begin{tabular}{|l|l|p{0.65\textwidth}|}
-\hline
-\# & \textbf{Column} & \textbf{Description}  \\
-\hline
-1 & project & 
-    project name \\ \hline
-2 & file & 
-    file name (full path)\\ \hline
-3 & sha & 
-    commit SHA (can be interpreted as file version or revision) \\ \hline
-4 & author & 
-    name of the contributor \textbf{(NOTE: it is not the author of the commit, but one of the file contributors)} \\ \hline
-5 & author\_file\_tot\_added & 
-    total lines added by the author to the file\\ \hline
-6 & author\_file\_added\_this\_commit & 
-    lines added by the author to the file with the commit (different from 0 only for the author of the commit)\\ \hline
-7 & file\_tot\_added & 
-    total lines added to the file\\ \hline
-8 & author\_file\_tot\_deleted & 
-    total lines deleted by the author from the file\\ \hline
-9 & author\_file\_deleted\_this\_commit & 
-    lines deleted by the author from the file with the commit (different from 0 only for the author of the commit)\\ \hline
-10 & file\_tot\_deleted & 
-    total lines deleted from the file\\ \hline
-11 & author\_file\_commits & 
-    total commits to the file by the author\\ \hline
-12 & file\_tot\_commits & 
-    total commits to the file\\ \hline
-13 & current\_lines\_authored & 
-    number of lines actually present in the file and authored by the author (obtained from the \textit{git blame} output)\\\hline
-14 & current\_file\_size & 
-    file size measured in LOC (lines of code)\\\hline
-15 & current\_comment\_lines & 
-    comments size in terms of lines\\\hline
-16 & max\_current\_author & 
-    number of lines actually present in the file and authored by the author that authored the highest number of lines actually in the file (obtained from the \textit{git blame} output)\\\hline
-17 & total\_current\_authors & 
-    number of authors of the lines actually present in the file (obtained from the \textit{git blame} output)\\\hline
-18 & commit\_date & date of the commit\\ \hline
-19 & bug\_fix & 1 if the commit fixes one or more bugs, zero otherwise\\ \hline
-20 & fixed\_bugs & JIRA KEY-ID of the bugs fixed, empty if the commit is not a bug fix\\ \hline
-21 & affected\_versions & list of the project releases affected by the bugs fixed by the commit, empty if the commit is not a bug fix\\ \hline
-22 & implicated & 1 if the file version is implicated \\ \hline
-\end{tabular}
-\end{table*}
+\input{tables/modeled_information}
 
 \subsubsection{Metrics computation}
 \label{sec:metrics}
-In this second step, for every project and using the respective history dataset, we compute the dataset that contain the metrics that we need for the classification. We need to compute the metrics for every version of every file, so the computation is done grouping by commit SHA and file (columns 2 and 3 of the history dataset, see Table~\ref{tab:history}). 
+In this second step, for every project and using the respective history
+dataset, we compute the dataset that contain the metrics that we need for the
+classification. We need to compute the metrics for every version of every file,
+so the computation is done grouping by commit SHA and file (columns 2 and 3 of
+the history dataset, see \Cref{tab:modeled_information}). 
 
-As metrics we compute the ownership ones described in Section~\ref{sec:ownership-metrics} together with the classic code metrics listed in Section~\ref{sec:classification-overview}. This will produce another data set, with fewer lines, that contains the metrics and the column ``implicated'', defined as in Table~\ref{tab:history}. A complete set of the columns of the metrics dataset can be seen in Table~\ref{tab:metrics}, where the terms ownership, minor, major and total must be interpreted as defined in Section~\ref{sec:ownership-metrics}. 
+As metrics we compute the ownership ones described in
+Section~\ref{sec:ownership-metrics} together with the classic code metrics
+listed in Section~\ref{sec:classification-overview}. This will produce another
+data set, with fewer lines, that contains the metrics and the column
+``implicated'', defined as in \Cref{tab:modeled_information}. A complete set of the columns of the metrics dataset can be seen in Table~\ref{tab:metrics}, where the terms ownership, minor, major and total must be interpreted as defined in Section~\ref{sec:ownership-metrics}. 
 
 A different version of this dataset is computed for every threshold listed in Section~\ref{sec:ownership-metrics} (the threshold used to distinguish minor and major contributors).
 Table~\ref{tab:metrics_example} shows an example of the metrics dataset resulting from the history dataset example shown in Table~\ref{tab:history_example}, using a threshold of 30\%; it contains a reduced set of columns: only the ones based on the lines added and on the commit count.
 
 \begin{table*}[t]
 \centering
-\caption{Columns of the metrics dataset;  See Section~\ref{sec:ownership-metrics} and Table~\ref{tab:history} for the terms used in the definitions.}
+\caption{Columns of the metrics dataset;  See
+Section~\ref{sec:ownership-metrics} and \Cref{tab:modeled_information} for the terms used in the definitions.}
 \label{tab:metrics}
 \footnotesize
 \begin{tabular}{|l|l|p{0.65\textwidth}|}

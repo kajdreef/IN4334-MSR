@@ -1,0 +1,49 @@
+\begin{table*}[ht]
+\centering
+\caption{Information modeled and stored in our dataset, per committed file}
+\label{tab:modeled_information}
+\begin{tabular}{|l|l|p{0.65\textwidth}|}
+\hline
+\# & \textbf{Column} & \textbf{Description}  \\\hline
+\hline
+1 & project & 
+    project name \\ \hline
+2 & file & 
+    file name (full path)\\ \hline
+3 & sha & 
+    commit SHA (also, file revision) \\ \hline
+4 & author & 
+    contributor's name \textbf{(NOTE: it is not the author of the commit, but one of the file contributors)} \\ \hline
+5 & author\_file\_tot\_added & 
+    total lines added by the author to the file\\ \hline
+6 & author\_file\_added\_this\_commit & 
+    lines added by the author to the file with the commit (different from 0 only for the author of the commit)\\ \hline
+7 & file\_tot\_added & 
+    total lines added to the file\\ \hline
+8 & author\_file\_tot\_deleted & 
+    total lines deleted by the author from the file\\ \hline
+9 & author\_file\_deleted\_this\_commit & 
+    lines deleted by the author from the file with the commit (different from 0 only for the author of the commit)\\ \hline
+10 & file\_tot\_deleted & 
+    total lines deleted from the file\\ \hline
+11 & author\_file\_commits & 
+    total commits to the file by the author\\ \hline
+12 & file\_tot\_commits & 
+    total commits to the file\\ \hline
+13 & current\_lines\_authored & 
+    number of lines actually present in the file and authored by the author (obtained from the \textit{git blame} output)\\\hline
+14 & current\_file\_size & 
+    file size measured in LOC (lines of code)\\\hline
+15 & current\_comment\_lines & 
+    comments size in terms of lines\\\hline
+16 & max\_current\_author & 
+    number of lines actually present in the file and authored by the author that authored the highest number of lines actually in the file (obtained from the \textit{git blame} output)\\\hline
+17 & total\_current\_authors & 
+    number of authors of the lines actually present in the file (obtained from the \textit{git blame} output)\\\hline
+18 & commit\_date & date of the commit\\ \hline
+19 & bug\_fix & 1 if the commit fixes one or more bugs, zero otherwise\\ \hline
+20 & fixed\_bugs & JIRA KEY-ID of the bugs fixed, empty if the commit is not a bug fix\\ \hline
+21 & affected\_versions & list of the project releases affected by the bugs fixed by the commit, empty if the commit is not a bug fix\\ \hline
+22 & implicated & 1 if the file version is implicated \\ \hline
+\end{tabular}
+\end{table*}
