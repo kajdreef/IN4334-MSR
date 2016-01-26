@@ -1,0 +1,18 @@
+n Application, c++ is most popular, followed by ruby, python, javascript.
+However, when look at percentage bugfixes, we php and objective-c have lot of bug-fixes, followed by python and javascript. This shows in application domain ruby might be better suitable since it is popular and produces lesser bug.
+
+Database: C is not the most popular language, however when it is used produce lot of bugs. In constrast, c++ and csharp are more popular but produce lesser bugs.
+
+In Middleware, thoug c is most preferable language, php, javascript, c++ produce almost as much bug as c.
+
+"pinctrl: nomadik: return if prcm_base is NULL";
+"This patch adds a check for npct->prcm_base to make sure that the address is
+not NULL before using it, as the driver was made capable of loading even without
+a proper memory resource in:  f1671bf pinctrl/nomadik: make independent of prcmu driver
+Also, ref (...)"
+
+This solves the following crash
+
+
+Initially we look at simply languages and domain.
+relationship between language and defects are really moderated by domains, bug-type,
