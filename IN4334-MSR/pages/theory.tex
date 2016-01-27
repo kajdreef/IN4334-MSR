@@ -9,14 +9,17 @@ Primary focus of this study is to investigate the impact of code ownership on so
 \ie the metrics are computed on the code artifacts of a specific software release and then correlated with the presence of defects in it. 
 One problem with such approach is that the metrics are not extracted when the defects are introduced, but later, so they do not capture the state of the code when it becomes defective. Developers introduce bugs while committing changes to the code base, and the effect of their ownership of respective software artifact may play a pivotal role to assess the quality of the commit.  Thus, in this paper, we first investigate:
 
-\textbf{RQ1.} Is a developer with lower code ownership more likely to introduce a buggy commit?
+\RQ{rq1}{Is a developer with lower code ownership more likely to introduce a
+buggy commit?}
 
 There is no fixed definition of {\em ownership} in the literature. While Bird \etal define ownership~\cite{bird:original} of a contributor as ``the ratio of number of commits that the contributor has made relative to the total
 number of commits for that component.'', Rahman et al.~\cite{Rahman:blame} describes ownership of a contributor as a number of line written by the contributor \wrt the total number of lines in the studied artifact. To understand the impact of different granularity on Code ownership metric, next we investigate: 
 
-\textbf{RQ2.} Which ownership granularity (line-based or commit-based) is a better predictor of buggy commits?
+\RQ{rq2}{Which ownership granularity (line-based or commit-based) is a better
+predictor of buggy commits?}
 
 Finally, number of contributors contributed to a software artifact up-to a given commit may also affect the code quality. Bird \etal defined \textit{Minor} and \textit{Major} contributors of a software artifact as the number of contributors with a proportion of ownership that is below and above a certain threshold respectively. As artifacts they considered the software binaries of a Microsoft Windows release and as variable to measure the proportions of ownership on every artifact they used the number of commits that changed it before the release, with a 5\% threshold to identify minor and major contributors.
 These metrics have been then reused and revisited in further studies~\cite{Foucault:oss, Greiler:replication}, targeting different projects (Microsoft and OSS), different kind of artifacts (source files, source code folders and Java packages) and varying the ownership threshold (5\%, 20\% and 50\%). However, none of the previous works did an explicit analysis on the impact of this ownership threshold on defect proneness. It leads us to ask the following question:
 
-\textbf{RQ3.} How does ownership threshold per commit impact the accuracy of defect prediction?
+\RQ{rq3}{How does ownership threshold per commit impact the accuracy of defect
+prediction?}
