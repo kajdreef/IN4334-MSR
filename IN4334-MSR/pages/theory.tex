@@ -4,31 +4,61 @@
 \label{sec:prob}
 
 Nowadays, most software artifacts are developed by multiple developers in a
-distributed environment. It has become increasingly important to understand how
-developers interact with source code to deliver a better product\textemdash
-should developers own a software artifact or should multiple developers
-cooperate to develop a piece of code segment? Many software metrics have been
-proposed to quantify the effect of distributed development on code quality,
-including experience~\cite{Rahman:blame}, socio-technical
+distributed environment. In such context, it has become increasingly important
+to understand how developers interact with source code to deliver a better
+product\textemdash should developers own a software artifact or should multiple
+developers cooperate to develop a piece of code segment? Many software metrics
+have been proposed to quantify the effect of distributed development on code
+quality, including experience~\cite{Rahman:blame}, socio-technical
 congruence~\cite{sarma09ICSE} \etc 
 
 The primary focus of this study is to investigate the relationship between code
 ownership and software quality. From a high-level perspective, \emph{code
 ownership} describes whether the \textit{responsibility} for a certain software
-artifact is spread around many developers or mostly limited to a single person,
-who can be considered its ``owner.'' It can also be interpreted as a measure of
-the \textit{expertise} of a developer with respect to the code
+artifact is spread around many developers or is mostly limited to a single
+person, who can be considered its ``owner.'' It can also be interpreted as a
+measure of the \textit{expertise} of a developer with respect to the code
 artifact~\cite{bird:original}.
 %
-Practically, ownership can be defined as
-the proportion of code contributions of the developers to a source code artifact over a particular
-period (\eg number of commits, number of added lines,
-\etc) \cite{Greiler:replication}.
+Practically, ownership can be defined as the proportion of code contributions
+of the developers to a source code artifact over a particular period (\eg
+number of commits, number of added lines, \etc) \cite{Greiler:replication}.
+
+\subsection{Previous studies}
+
+A number of prior studies focused on code ownership and its relationship with
+software quality.
+% Bird, don't touch my code
+Bird \etal first examined this topic and defined ownership in terms of the
+\emph{proportion of commits} on software artifacts. In particular, given a
+developer and a software component, her ownership is computed as ``the ratio of
+number of commits that [the considered developer] has made relative to the
+total number of commits for that component''~\cite{bird:original}. They also
+introduced the notion of \emph{minor contributor} (defined as each developer
+who has less than 5\% ownership) and \emph{major contributor} (each developer
+with more than 5\% ownership). Bird \etal put in relation these metrics with
+the post-release defects in binaries (a compilation of several source code
+files) from Microsoft Windows Vista and Windows 7; they found that binaries
+either (1) without a well-defined owner or (2) with a large number of minor
+contributors are more likely to be defective.
+% Focault, code ownership in OSS
+Focault \etal~\cite{Foucault:oss} replicated the above study focusing on
+open-source systems, as opposed to the proprietary Microsoft Windows.
+
+
+on seven
+open-source projects. They used the same granularity for the metrics and the
+same threshold to distinguish minor and major contributors while changing only
+the code artifacts on which the study was focused (Java files and packages).
+The outcome is contrasting with the previous results: it shows no strong
+correlation between ownership and defects, but it states that it is more
+significant when the metrics are computed on more coarse-grained artifacts.
+
+
 % previous studies
 Previous research investigated the relationship of ``ownership'' with software
 quality and found that, in general, a high degree of ownership relates to fewer
 software defects~\cite{bird:original}.
-
 
 These studies are typically
 conducted at release granularity, 
