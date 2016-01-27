@@ -8,21 +8,29 @@ distributed environment. It has become increasingly important to understand how
 developers interact with source code to deliver a better product\textemdash
 should developers own a software artifact or should multiple developers
 cooperate to develop a piece of code segment? Many software metrics have been
-proposed to quantify the effect of distributed development on code quality
-including code ownership, experience, \etc 
+proposed to quantify the effect of distributed development on code quality,
+including experience~\cite{Rahman:blame}, socio-technical
+congruence~\cite{sarma09ICSE} \etc 
 
-Primary focus of this study is to investigate the impact of code ownership on
-software quality. {\em Code ownership} can be defined as the proportion of
-contribution of the developers to a source code artifact over a particular
-period, in terms of code changes (\eg number of commits, number of added lines,
-\etc) \cite{Greiler:replication}. It describes whether the
-\textit{responsibility} for a certain software artifact is spread around many
-developers, or if there is a single person that can be considered its
-``owner'';  it can also be interpreted as a measure of the \textit{expertise}
-of a developer with respect to the code artifact~\cite{bird:original}.
-Previous research studied the relationship of ``ownership" with software defect
-and found that, in general, a higher degree of ownership relates to a fewer
-software defect~\cite{bird:original}~\bray{check}. These studies are typically
+The primary focus of this study is to investigate the relationship between code
+ownership and software quality. From a high-level perspective, \emph{code
+ownership} describes whether the \textit{responsibility} for a certain software
+artifact is spread around many developers or mostly limited to a single person,
+who can be considered its ``owner.'' It can also be interpreted as a measure of
+the \textit{expertise} of a developer with respect to the code
+artifact~\cite{bird:original}.
+%
+Practically, ownership can be defined as
+the proportion of code contributions of the developers to a source code artifact over a particular
+period (\eg number of commits, number of added lines,
+\etc) \cite{Greiler:replication}.
+% previous studies
+Previous research investigated the relationship of ``ownership'' with software
+quality and found that, in general, a high degree of ownership relates to fewer
+software defects~\cite{bird:original}.
+
+
+These studies are typically
 conducted at release granularity, 
 \ie the metrics are computed on the code artifacts of a specific software
 release and then correlated with the presence of defects in it. 
@@ -46,7 +54,7 @@ understand the impact of different granularity on Code ownership metric, next
 we investigate: 
 
 \RQ{rq2}{Which ownership granularity (line-based or commit-based) is a better
-predictor of buggy commits?}
+predictor of bug-inducing commits?}
 
 Finally, number of contributors contributed to a software artifact up-to a
 given commit may also affect the code quality. Bird \etal defined
